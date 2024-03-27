@@ -33,7 +33,7 @@ LD_LIB +=$(FFTW_LIB)
 #ifneq (,$(findstring frontier,$(SYSTEMS)))
 #F90 = ftn
 #endif
-F90=mpiifort -fc=ifx
+F90=mpiifx
 PLIB = gem_pputil.o
 
 ifneq (,$(findstring frontier,$(SYSTEMS)))
