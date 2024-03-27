@@ -1,6 +1,6 @@
 #!/bin/bash
 
-profiling="none" # available values: none
+profiling="unitrace" # available values: none,unitrace
 
 # run this runme as: nohup ./runme.sh > ss.txt 2>&1 &
 export I_MPI_OFFLOAD_SYMMETRIC=1
@@ -15,7 +15,8 @@ export I_MPI_OFFLOAD_RDMA=1
 export NEOReadDebugKeys=1
 export EnableImplicitScaling=0
 
-export OMP_NUM_THREADS=14
+# export OMP_NUM_THREADS=14
+export OMP_NUM_THREADS=1
 export OMP_PLACES=CORES
 export OMP_PROC_BIND=CLOSE
 
@@ -45,5 +46,8 @@ mkdir -p out matrix dump
 ulimit -s unlimited
 
 if [[ "${profiling}" == "none" ]]; then
-	mpirun -np 8 ../scripts/profile-on-0.sh ../gem_main
+	mpirun -np 8 ../scripts/profile-on-0.sh ../gem_main > STDOUT 2> STDERR
+elif [[ "${profiling}" == "unitrace" ]]; then
+	module load intel/pti-gpu-nda/2023-12-7
+	mpirun -np 8 ../scripts/unitrace+profile-on-0.sh ../gem_main > STDOUT 2> STDERR
 fi
