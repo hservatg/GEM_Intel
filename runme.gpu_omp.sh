@@ -1,6 +1,6 @@
 #!/bin/bash
 
-profiling="unitrace" # available values: none,unitrace
+profiling="unitrace" # available values: none,unitrace,zedatavolume
 
 # run this runme as: nohup ./runme.sh > ss.txt 2>&1 &
 export I_MPI_OFFLOAD_SYMMETRIC=1
@@ -50,4 +50,6 @@ if [[ "${profiling}" == "none" ]]; then
 elif [[ "${profiling}" == "unitrace" ]]; then
 	module load intel/pti-gpu-nda/2023-12-7
 	mpirun -np 8 ../scripts/unitrace+profile-on-0.sh ../gem_main > STDOUT 2> STDERR
+elif [[ "${profiling}" == "zedatavolume" ]]; then
+	mpirun -np 8 ../scripts/zedatavolume+profile-on-0.sh ../gem_main > STDOUT 2> STDERR
 fi
