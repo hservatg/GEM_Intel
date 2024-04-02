@@ -105,7 +105,7 @@ CONTAINS
     !
     !!!for iz in array (htc)
     !$acc serial present(xp) copyout(xpsize)
-!$omp target map(from:xpsize) map(alloc:xp)
+!$omp target map(from:xpsize) map(present,alloc:xp)
      xpsize=size(xp)
     !$acc end serial
 !$omp end target
@@ -133,7 +133,7 @@ CONTAINS
     
     dzz = lz / nvp !step-length along z directioisn
     !$acc parallel  present(xp,iz_arr)
-!$omp target teams map(alloc:xp,iz_arr)
+!$omp target teams map(present,alloc:xp,iz_arr)
     !$acc loop gang vector
 !$omp distribute parallel do 
     do ip=1,np
@@ -146,7 +146,7 @@ CONTAINS
     !$acc update host(iz_arr(1:np))
 !$omp target update from(iz_arr(1:np))
     !$acc data present(s_counts)
-!$omp target data map(alloc:s_counts)
+!$omp target data map(present,alloc:s_counts)
     !$acc parallel
 !$omp target teams
     !$acc loop gang vector
@@ -160,7 +160,7 @@ CONTAINS
 !$omp end target data
     
     !$acc data present(s_counts,iz_arr)
-!$omp target data map(alloc:s_counts,iz_arr)
+!$omp target data map(present,alloc:s_counts,iz_arr)
     !$acc parallel 
 !$omp target teams
     !$acc loop gang vector
@@ -184,7 +184,7 @@ CONTAINS
 !$omp taskwait
 
     !$acc data present(s_displ,s_counts)
-!$omp target data map(alloc:s_displ,s_counts)
+!$omp target data map(present,alloc:s_displ,s_counts)
     !$acc serial
 !$omp target
     s_displ(0) = 0
@@ -202,7 +202,7 @@ CONTAINS
 !$omp taskwait
 
     !$acc data present(s_counts)
-!$omp target data map(alloc:s_counts)
+!$omp target data map(present,alloc:s_counts)
       nsize=0
     !$acc parallel loop gang vector reduction(+:nsize)
 !$omp target teams distribute parallel do  reduction(+:nsize)
@@ -264,7 +264,7 @@ CONTAINS
     ip_last_ipf=np
 
     !$acc serial present(xp,ipfill,iphole,iz_arr) private(is_hole,i)
-!$omp target map(alloc:xp,ipfill,iphole,iz_arr)
+!$omp target map(present,alloc:xp,ipfill,iphole,iz_arr)
     DO ih_ipf=nsize,1,-1
     !!!do nothing by default
        ipfill(ih_ipf)=iphole(ih_ipf)
@@ -515,7 +515,7 @@ start_tm=MPI_WTIME()
        !$acc update device(r_buf(1:tot_count))
 !$omp target update to(r_buf(1:tot_count))
        !$acc parallel present(xp,r_buf)
-!$omp target teams map(alloc:xp,r_buf)
+!$omp target teams map(present,alloc:xp,r_buf)
        !$acc loop gang vector
 !$omp distribute parallel do 
        do i=1,tot_count
@@ -812,6 +812,8 @@ tottm_5=end_tm-start_tm
     use mpi
 
     INTEGER, INTENT(OUT) :: ierr
+
+    ierr = 0
 !
 !   Local vars
 !----------------------------------------------------------------------!
