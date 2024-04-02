@@ -478,7 +478,7 @@ start_tm=MPI_WTIME()
     nhole = sum(s_counts)
     ip = np_old
     !$acc parallel present(xp,iphole,ipfill)
-!$omp target teams map(alloc:xp,iphole,ipfill)
+!$omp target teams map(present,alloc:xp,iphole,ipfill)
     !$acc loop independent 
 !$omp distribute parallel do  order(concurrent)
     DO ih =1,nhole
