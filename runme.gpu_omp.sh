@@ -1,6 +1,6 @@
 #!/bin/bash
 
-profiling="unitrace" # available values: none,unitrace,zedatavolume
+profiling="none" # available values: none,unitrace,zedatavolume
 
 # run this runme as: nohup ./runme.sh > ss.txt 2>&1 &
 export I_MPI_OFFLOAD_SYMMETRIC=1
@@ -31,14 +31,20 @@ export EnableRecoverablePageFaults=0 #suggested by Tobias, not yet working 20240
 #export IGC_ForceOCLSIMDWidth=16                #suggested by Ravi, works for 16 or 32
 #export IGC_PrintFunctionSizeAnalysis=1         #suggested by Ravi, print out not easy to understand
 
-module purge
-module load intel/oneapi/2024.0
+# module purge
+# module load intel/oneapi/2024.0
+# module load intel/oneapi/2024.1
+
+export IGC_OverrideOCLMaxParamSize=4096 # Required?
+
+# source ~/modules-gen.sh
 
 # force openmp to run codes on GPU
 export OMP_TARGET_OFFLOAD=MANDATORY  # avail value: DISABLED MANDATORY DEFAULT
 
 CURRENT_TIME=`date +%d%m%y-%H%M`
 
+echo Working dir = case.gpu_omp.${CURRENT_TIME}
 cp -r case.reference case.gpu_omp.${CURRENT_TIME}
 cd case.gpu_omp.${CURRENT_TIME}
 mkdir -p out matrix dump
@@ -46,10 +52,10 @@ mkdir -p out matrix dump
 ulimit -s unlimited
 
 if [[ "${profiling}" == "none" ]]; then
-	mpirun -np 8 ../scripts/profile-on-0.sh ../gem_main > STDOUT 2> STDERR
+	mpirun -np 8 ../scripts/profile-on-0.sh ../gem_main
 elif [[ "${profiling}" == "unitrace" ]]; then
 	module load intel/pti-gpu-nda/2023-12-7
-	mpirun -np 8 ../scripts/unitrace+profile-on-0.sh ../gem_main > STDOUT 2> STDERR
+	mpirun -np 8 ../scripts/unitrace+profile-on-0.sh ../gem_main 
 elif [[ "${profiling}" == "zedatavolume" ]]; then
-	mpirun -np 8 ../scripts/zedatavolume+profile-on-0.sh ../gem_main > STDOUT 2> STDERR
+	mpirun -np 8 ../scripts/zedatavolume+profile-on-0.sh ../gem_main
 fi

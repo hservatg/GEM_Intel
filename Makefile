@@ -41,7 +41,8 @@ endif
     OPT += -DOPENMP_CPU
 endif
 endif
-     OPT = -g -DGPU -DOPENACC2OPENMP_ORIGINAL_OPENMP -qopt-report=3 -O2 -fiopenmp -fopenmp-targets=spir64 -r8 -i8 -fpp #AOT
+     OPT = -g -DGPU -DOPENACC2OPENMP_ORIGINAL_OPENMP -O2 -fiopenmp -fopenmp-targets=spir64 -r8 -i8 -fpp -switch use_new_lambda_maps_for_dvs
+     # OPT = -g -DGPU -DOPENACC2OPENMP_ORIGINAL_OPENMP -O2 -fiopenmp -fopenmp-targets=spir64 -r8 -i8 -fpp
      LFFLAGS = $(OPT) $(OBJS) $(PLIB) $(LIBS) $(LIB) $(LD_LIB) -L${MKLROOT}/lib/intel64 -lmkl_sycl -lmkl_intel_ilp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -ldl
      CFFLAGS = $(OPT) $(LIB) -fpp  
 
