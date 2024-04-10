@@ -577,7 +577,7 @@ subroutine init
         write(*,*) 'ktheta*rhos = ',2*pi*sqrt(mims(1))*sqrt(t0e(nr/2))/ly
         write(*,*) 'cs/a, q0, q0p, s^hat = ',sqrt(t0e(nr/2)/2.)/a, q0, q0p, q0p/q0*r0
         write(*,*) 'rho* = rhos/a = ', sqrt(mims(1))*sqrt(t0e(nr/2))/a
-        write(*,*) 'f0p,psip(nr/2),Bunit = ',f0p,psip(nr/2),bunit
+        write(*,*) 'psip(nr/2),Bunit = ',psip(nr/2),bunit
         write(*,*) 'lxa min = ', ly*q0/(2*pi*r0*q0p)/a
         write(*,*) 't0i(nr/2)= ', t0i(nr/2)
         write(*,*) 'Gyrokrs = ', 2*pi*sqrt(mims(1))*sqrt(t0e(nr/2))/ly/bunit
@@ -1028,7 +1028,7 @@ subroutine cpush(n,ns)
 
 start_cpush_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams
+!$omp target teams map(tofrom:myke,mynos,myavewi,myefl_es,mypfl_es)
     !$acc loop gang vector private(rhox,rhoy,aparp)
 !$omp distribute parallel do private(rhox,rhoy,aparp)
     do m=1,mm(ns)
@@ -3538,7 +3538,7 @@ subroutine pint
 
 start_pint_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams
+!$omp target teams map(tofrom:myopz,myoen,myavptch,myaven)
     !$acc loop gang vector
 !$omp distribute parallel do
     do m=1,mme

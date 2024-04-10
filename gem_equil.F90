@@ -18,7 +18,7 @@ MODULE gem_equil
   real :: beta,Rovera,shat0,teti,tcti,rhoia,Rovlni,Rovlti,Rovlne,Rovlte,Rovlnc,Rovltc,ncne,nuacs
   real :: rhoi !yjhu added
   real :: gamma_E,mach
-  real :: f0, f0p,bunit,debye
+  real :: f0, bunit,debye
   real :: rin,rout,dr,dth,delz,jacmax
   real :: cn0e,cn0i,cn0b,cn0c,n0emax,n0imax,n0bmax,n0cmax
   real :: r0a,lxa,lymult,lxmult,delra,delri,delre,delrn,rina,routa,betai,betae, &
