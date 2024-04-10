@@ -18,11 +18,11 @@ MODULE gem_equil
   real :: beta,Rovera,shat0,teti,tcti,rhoia,Rovlni,Rovlti,Rovlne,Rovlte,Rovlnc,Rovltc,ncne,nuacs
   real :: rhoi !yjhu added
   real :: gamma_E,mach
-  real :: f0, f0p,candyf0p,bunit,debye
+  real :: f0, f0p,bunit,debye
   real :: rin,rout,dr,dth,delz,jacmax
   real :: cn0e,cn0i,cn0b,cn0c,n0emax,n0imax,n0bmax,n0cmax
   real :: r0a,lxa,lymult,lxmult,delra,delri,delre,delrn,rina,routa,betai,betae, &
-               tir0,xnir0
+               tir0
 
   integer :: nr=240,nr2=240,ntheta=512,idiag=0,isgnf=1,isgnq=-1
   real,dimension(:,:),allocatable :: bfld,qhat,radius,gr,gth,grdgt,grcgt, &
@@ -43,7 +43,7 @@ MODULE gem_equil
   real,dimension(:,:),allocatable :: t0s,xn0s,capts,capns,vpars,vparsp
   real,dimension(:),allocatable :: cn0s,n0smax,tgis
   real :: tge
-  real:: bu,tu,nu,xu,frequ,vu,eru
+  real:: bu,tu,nu,xu,frequ,vu
 
 !for including bstar effects
   real,dimension(:),allocatable :: psip2

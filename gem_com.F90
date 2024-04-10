@@ -34,7 +34,7 @@ module gem_com
 
   integer :: gemout=777
   character(len=70) outname
-  REAL :: endtm,begtm,pstm
+  REAL :: endtm,begtm
   REAL :: starttm,lasttm,tottm
   real :: start_ppush_tm, end_ppush_tm, tot_ppush_tm = 0, start_cpush_tm, end_cpush_tm, tot_cpush_tm = 0, start_pint_tm, end_pint_tm, tot_pint_tm = 0, start_cint_tm, end_cint_tm, tot_cint_tm = 0, start_grid_tm, end_grid_tm, tot_grid_tm = 0
   real :: start_jie_tm, end_jie_tm, tot_jie_tm = 0, start_den0_tm, end_den0_tm, tot_den0_tm = 0, start_setw_tm, end_setw_tm, tot_setw_tm = 0, start_weatxeps_tm, end_weatxeps_tm, tot_weatxeps_tm = 0, start_wiatxeps_tm, end_wiatxeps_tm, tot_wiatxeps_tm = 0, start_pbi_tm, end_pbi_tm, tot_pbi_tm = 0, start_pbe_tm, end_pbe_tm, tot_pbe_tm = 0, start_jpar0_tm, end_jpar0_tm, tot_jpar0_tm = 0 

@@ -89,7 +89,7 @@ program gem_main
     call MPI_Allreduce(MPI_IN_PLACE, tot_poisson_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
     call MPI_Allreduce(MPI_IN_PLACE, tot_ampere_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr) 
     call MPI_ALLreduce(MPI_IN_PLACE, tot_init_lap_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    if(myid==0) write(*,*)'ps time=',pstm,'tot time=',tottm - tot_init_lap_tm, 'ppush time', tot_ppush_tm, 'cpush time', tot_cpush_tm, 'pint time', tot_pint_tm, 'cint time', tot_cint_tm, 'grid time', tot_grid_tm, 'jie time', tot_jie_tm, 'den0 time', tot_den0_tm, 'setw time', tot_setw_tm, 'weatxeps time', tot_weatxeps_tm, 'wiatxeps time', tot_wiatxeps_tm, 'pbi time', tot_pbi_tm, 'pbe time', tot_pbe_tm, 'jpar0 time', tot_jpar0_tm
+    if(myid==0) write(*,*)'tot time=',tottm - tot_init_lap_tm, 'ppush time', tot_ppush_tm, 'cpush time', tot_cpush_tm, 'pint time', tot_pint_tm, 'cint time', tot_cint_tm, 'grid time', tot_grid_tm, 'jie time', tot_jie_tm, 'den0 time', tot_den0_tm, 'setw time', tot_setw_tm, 'weatxeps time', tot_weatxeps_tm, 'wiatxeps time', tot_wiatxeps_tm, 'pbi time', tot_pbi_tm, 'pbe time', tot_pbe_tm, 'jpar0 time', tot_jpar0_tm
     if(myid==0) write(*,*)'init pmove', tot_init_pmove_tm, 'pmove', tot_pmove_tm, 'poisson', tot_poisson_tm, 'ampere', tot_ampere_tm - tot_init_lap_tm, 'init_lap', tot_init_lap_tm
     call MPI_BARRIER(MPI_COMM_WORLD,ierr)
 
@@ -568,8 +568,8 @@ subroutine init
         write(*,*)'mm1= ',mm1
         write(*,*)'pzcrite,encrit = ',pzcrite,encrit
         write(*,*)'nue0 = ',nue0(1),nue0(nr/2),nue0(nr-1)
-        write(*,*)'xn0e(1),xnir0 = ',xn0e(1),xnir0
-        write(*,*)'frequ, eru = ', frequ, eru
+        write(*,*)'xn0e(1) = ',xn0e(1)
+        write(*,*)'frequ = ', frequ
         write(*,*) 'lxa,lymult,delra,r0a,rina,routa=',lxa,lymult,delra,r0a,rina,routa
         write(*,*) 'a,r0,rmaj0,q0,lx,ly,lz=',a,r0,rmaj0,q0,lx,ly,lz
         write(*,*) 't0,kyrhoi_local=',t0i(nr/2),2*pi*sqrt(mims(1))*sqrt(t0i(nr/2))/ly
@@ -577,7 +577,7 @@ subroutine init
         write(*,*) 'ktheta*rhos = ',2*pi*sqrt(mims(1))*sqrt(t0e(nr/2))/ly
         write(*,*) 'cs/a, q0, q0p, s^hat = ',sqrt(t0e(nr/2)/2.)/a, q0, q0p, q0p/q0*r0
         write(*,*) 'rho* = rhos/a = ', sqrt(mims(1))*sqrt(t0e(nr/2))/a
-        write(*,*) 'f0p,psip(nr/2),Bunit,candyf0p = ',f0p,psip(nr/2),bunit,candyf0p
+        write(*,*) 'f0p,psip(nr/2),Bunit = ',f0p,psip(nr/2),bunit
         write(*,*) 'lxa min = ', ly*q0/(2*pi*r0*q0p)/a
         write(*,*) 't0i(nr/2)= ', t0i(nr/2)
         write(*,*) 'Gyrokrs = ', 2*pi*sqrt(mims(1))*sqrt(t0e(nr/2))/ly/bunit
@@ -3997,7 +3997,7 @@ subroutine cint(n)
     mynovpar = 0
 start_cint_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams
+!$omp target teams map(tofrom:myke,mytotn,mytrap,myptrp,myavewe,myefl_es,mypfl_es)
     !$acc loop gang vector
 !$omp distribute parallel do
     do m=1,mme
