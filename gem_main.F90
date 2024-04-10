@@ -4391,7 +4391,7 @@ tot_cint_tm = tot_cint_tm + end_cint_tm - start_cint_tm
     sbuf(6)=mytrap
     sbuf(7)=myptrp
     sbuf(8)=myavewe
-    call MPI_ALLREDUCE(sbuf,rbuf,10,  &
+    call MPI_ALLREDUCE(sbuf,rbuf,8,  &
         MPI_REAL8,MPI_SUM,  &
         MPI_COMM_WORLD,ierr)
 
@@ -4410,7 +4410,7 @@ tot_cint_tm = tot_cint_tm + end_cint_tm - start_cint_tm
     call MPI_BARRIER(MPI_COMM_WORLD,ierr)
 
     sbuf(1:nsubd) = myefl_es(1:nsubd)
-    call MPI_ALLREDUCE(sbuf,rbuf,10,  &
+    call MPI_ALLREDUCE(sbuf,rbuf,nsubd,  &
         MPI_REAL8,MPI_SUM,  &
         MPI_COMM_WORLD,ierr)
     do k = 1,nsubd   
@@ -4418,7 +4418,7 @@ tot_cint_tm = tot_cint_tm + end_cint_tm - start_cint_tm
     end do
 
     sbuf(1:nsubd) = myefl_em(1:nsubd)
-    call MPI_ALLREDUCE(sbuf,rbuf,10,  &
+    call MPI_ALLREDUCE(sbuf,rbuf,nsubd,  &
         MPI_REAL8,MPI_SUM,  &
         MPI_COMM_WORLD,ierr)
     do k = 1,nsubd   
@@ -4426,7 +4426,7 @@ tot_cint_tm = tot_cint_tm + end_cint_tm - start_cint_tm
     end do
 
     sbuf(1:nsubd) = mypfl_es(1:nsubd)
-    call MPI_ALLREDUCE(sbuf,rbuf,10,  &
+    call MPI_ALLREDUCE(sbuf,rbuf,nsubd,  &
         MPI_REAL8,MPI_SUM,  &
         MPI_COMM_WORLD,ierr)
     do k = 1,nsubd   
@@ -4434,7 +4434,7 @@ tot_cint_tm = tot_cint_tm + end_cint_tm - start_cint_tm
     end do
 
     sbuf(1:nsubd) = mypfl_em(1:nsubd)
-    call MPI_ALLREDUCE(sbuf,rbuf,10,  &
+    call MPI_ALLREDUCE(sbuf,rbuf,nsubd,  &
         MPI_REAL8,MPI_SUM,  &
         MPI_COMM_WORLD,ierr)
     do k = 1,nsubd   
