@@ -303,7 +303,7 @@ subroutine init
     dte = dt
     iadi = 0
 
-    fradi = 1 ! HSG hack
+    fradi = 0 ! HSG hack, as suggested by Junyi
 
     if(isg.gt.0.)fradi = isg
     if(ifluid.eq.0)then
