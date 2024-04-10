@@ -400,6 +400,7 @@ contains
 
        xn0e(i) = wx0*nexgc(j)+wx1*nexgc(j+1)
        xn0i(i) = xn0e(i) !wx0*nigem(j)+wx1*nigem(j+1)
+       xn0c(i) = xn0e(i) !wx0*nigem(j)+wx1*nigem(j+1) ! HSG hack
        phincp(i) = 0.
        nue0(i) = 1.
        zeff(i) = 1.

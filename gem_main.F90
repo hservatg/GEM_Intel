@@ -302,6 +302,9 @@ subroutine init
 
     dte = dt
     iadi = 0
+
+    fradi = 1 ! HSG hack
+
     if(isg.gt.0.)fradi = isg
     if(ifluid.eq.0)then
         iadi = 1
@@ -1339,7 +1342,7 @@ tot_cpush_tm = tot_cpush_tm + end_cpush_tm - start_cpush_tm
     sbuf(3)=mypfl_es(nsubd/2)
     sbuf(4)=mynos
     sbuf(5)=myavewi
-    call MPI_ALLREDUCE(sbuf,rbuf,10,  &
+    call MPI_ALLREDUCE(sbuf,rbuf,5,  & ! HSG hack
         MPI_REAL8,MPI_SUM,           &
         MPI_COMM_WORLD,ierr)
 
@@ -1354,7 +1357,7 @@ tot_cpush_tm = tot_cpush_tm + end_cpush_tm - start_cpush_tm
     call MPI_BARRIER(MPI_COMM_WORLD,ierr)
 
     sbuf(1:nsubd) = myefl_es(1:nsubd)
-    call MPI_ALLREDUCE(sbuf,rbuf,10,  &
+    call MPI_ALLREDUCE(sbuf,rbuf,nsubd,  & ! HSG hack
         MPI_REAL8,MPI_SUM,  &
         MPI_COMM_WORLD,ierr)
     do k = 1,nsubd
@@ -1362,7 +1365,7 @@ tot_cpush_tm = tot_cpush_tm + end_cpush_tm - start_cpush_tm
     end do
 
     sbuf(1:nsubd) = myefl_em(1:nsubd)
-    call MPI_ALLREDUCE(sbuf,rbuf,10,  &
+    call MPI_ALLREDUCE(sbuf,rbuf,nsubd,  & ! HSG hack
         MPI_REAL8,MPI_SUM,  &
         MPI_COMM_WORLD,ierr)
     do k = 1,nsubd
@@ -1370,7 +1373,7 @@ tot_cpush_tm = tot_cpush_tm + end_cpush_tm - start_cpush_tm
     end do
 
     sbuf(1:nsubd) = mypfl_es(1:nsubd)
-    call MPI_ALLREDUCE(sbuf,rbuf,10,  &
+    call MPI_ALLREDUCE(sbuf,rbuf,nsubd,  & ! HSG hack
         MPI_REAL8,MPI_SUM,  &
         MPI_COMM_WORLD,ierr)
     do k = 1,nsubd
@@ -1378,7 +1381,7 @@ tot_cpush_tm = tot_cpush_tm + end_cpush_tm - start_cpush_tm
     end do
 
     sbuf(1:nsubd) = mypfl_em(1:nsubd)
-    call MPI_ALLREDUCE(sbuf,rbuf,10,  &
+    call MPI_ALLREDUCE(sbuf,rbuf,nsubd,  & ! HSG hack
         MPI_REAL8,MPI_SUM,  &
         MPI_COMM_WORLD,ierr)
     do k = 1,nsubd
@@ -1634,11 +1637,11 @@ tot_grid_tm = tot_grid_tm + end_grid_tm - start_grid_tm
         call zon(den(ns,0:imx,0:jmx,0:1),mydnz(0:imx))
         call MPI_ALLREDUCE(mydtz,  &
             dtz,             &
-            imx,MPI_REAL8,       &
+            imx+1,MPI_REAL8,       & ! HSG hack
             MPI_SUM,GRID_COMM,ierr)
         call MPI_ALLREDUCE(mydnz,  &
             dnz,             &
-            imx,MPI_REAL8,       &
+            imx+1,MPI_REAL8,       & ! HSG hack
             MPI_SUM,GRID_COMM,ierr)
 
         do i = 0,im
@@ -1875,11 +1878,11 @@ tot_grid_tm = tot_grid_tm + end_grid_tm - start_grid_tm
     call zon(dene(0:imx,0:jmx,0:1),mydnz(0:imx))
     call MPI_ALLREDUCE(mydtz,  &
         dtz,             &
-        imx,MPI_REAL8,       &
+        imx+1,MPI_REAL8,       & ! HSG hack
         MPI_SUM,GRID_COMM,ierr)
     call MPI_ALLREDUCE(mydnz,  &
         dnz,             &
-        imx,MPI_REAL8,       &
+        imx+1,MPI_REAL8,       & ! HSG hack
         MPI_SUM,GRID_COMM,ierr)
 
     do i = 0,im
@@ -2949,7 +2952,7 @@ subroutine yveck(u,n)
             tube_comm,ierr)
         call MPI_BARRIER(MPI_COMM_WORLD,ierr)
 
-        do i = 0,4
+        do i = 0, kmx-1 ! HSG hack
             yyamp(j,i) = abs(tmpz(i)) !cabs
             yyre(j,i) = real(tmpz(i))
             yyim(j,i) = aimag(tmpz(i))
@@ -5751,7 +5754,6 @@ subroutine split_weight(n,ip)
     use gem_com
     use gem_equil
     implicit none
-
     integer :: n,i,j,k,ip
     if(isg.gt.0..and.ifluid.eq.1)then
         call jie(ip,n)
@@ -11498,7 +11500,8 @@ subroutine laplace(u)
                     cnt = (imx-1)*numpol
                     call mpi_allreduce(umn(1:imx-1,0:numpol-1),v(1:imx-1,0:numpol-1),cnt,MPI_DOUBLE_COMPLEX,mpi_sum, &
                         tube_comm,ierr)
-                    v = v/pi2**2
+                    ! v = v/pi2**2
+                    v(1:imx-1,0:numpol-1) = v(1:imx-1,0:numpol-1)/pi2**2 ! HSG hack (or set v to 0 before)
 
 
                     !inverse transform

@@ -194,6 +194,9 @@ contains
 
   subroutine new_gem_com()
     nxpp = imx !/ntube
+
+    rmaa = 1 ! HSG hack
+
     allocate(workx(4*imx),worky(4*jmx),workz(4*kmx),xsinin(imx),xsinout(imx))
     allocate(tmpx(0:imx-1),xin(imx),xout(imx),yin(jmx),yout(jmx),zin(kmx),zout(kmx))
     allocate(tmpy(0:jmx-1))
@@ -213,6 +216,9 @@ contains
 
     ALLOCATE( den(nsmx,0:nxpp,0:jmx,0:1),dti(nsmx,0:nxpp,0:jmx,0:1), &
          delte(0:nxpp,0:jmx,0:1))
+
+    delte = 0 ! HSG hack
+
     ALLOCATE( rho(0:nxpp,0:jmx,0:1),drhoidt(0:nxpp,0:jmx,0:1), &
          jion(0:nxpp,0:jmx,0:1),jionx(0:nxpp,0:jmx,0:1), &
          jiony(0:nxpp,0:jmx,0:1))
@@ -221,6 +227,10 @@ contains
     allocate( dnidt(nsmx,0:nxpp,0:jmx,0:1),jpar(nsmx,0:nxpp,0:jmx,0:1),  &
          jpex(nsmx,0:nxpp,0:jmx,0:1),jpey(nsmx,0:nxpp,0:jmx,0:1))
     allocate( dphidt(0:nxpp,0:jmx,0:1))
+
+    dphidt = 0 !$ HSG hacks (2)
+    !$omp target enter data map(dphidt)
+
     ALLOCATE( ex(0:nxpp,0:jmx,0:1)) 
     ALLOCATE( ey(0:nxpp,0:jmx,0:1)) 
     ALLOCATE( ez(0:nxpp,0:jmx,0:1))
@@ -264,6 +274,9 @@ contains
     allocate( x3e(1:mmxe),y3e(1:mmxe),z3e(1:mmxe),u3e(1:mmxe),mue3(1:mmxe))
     allocate( w2e(1:mmxe),w3e(1:mmxe))
     allocate( ipass(1:mmxe), index(1:mmxe))
+
+    ipass = 0 ! HSG hack
+
     allocate(w000(1:mmxe),w001(1:mmxe),w010(1:mmxe),w011(1:mmxe),&
          w100(1:mmxe),w101(1:mmxe),w110(1:mmxe),w111(1:mmxe))
 !$acc enter data create(mue,xie,pze,eke,z0e,u0e,x2e,y2e,z2e,u2e,mue2,x3e,y3e,z3e,u3e,mue3)
@@ -295,6 +308,17 @@ contains
          pfl_es(1:3,1:nsubd,0:nmx),efl_es(1:3,1:nsubd,0:nmx), &
          pfle_em(1:nsubd,0:nmx),efle_em(1:nsubd,0:nmx), &
          pfl_em(1:3,1:nsubd,0:nmx),efl_em(1:3,1:nsubd,0:nmx))
+
+    !HSG hacks (8)
+    efle_es = 0
+    pfle_es = 0
+    pfl_es = 0
+    efl_es = 0
+    efle_em = 0
+    pfle_em = 0
+    pfl_em = 0
+    efl_em = 0
+
     ALLOCATE( chii(1:nsubd,0:nmx),chie(1:nsubd,0:nmx),ddi(1:nsubd,0:nmx), &
          achii(1:nsubd),achie(1:nsubd),addi(1:nsubd))
 
