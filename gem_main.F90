@@ -654,7 +654,7 @@ subroutine ppush(n,ns)
 
     start_ppush_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams
+!$omp target teams map(tofrom:mynopi)
     !$acc loop gang vector private(rhox,rhoy)
 !$omp distribute parallel do private(rhox,rhoy)
     do m=1,mm(ns)
