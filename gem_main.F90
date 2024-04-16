@@ -3997,7 +3997,7 @@ subroutine cint(n)
     mynovpar = 0
 start_cint_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams map(tofrom:myke,mytotn,mytrap,myptrp,myavewe,myefl_es,mypfl_es)
+!$omp target teams map(tofrom:mynowe,mynovpar,myke,mytotn,mytrap,myptrp,myavewe,myefl_es,mypfl_es)
     !$acc loop gang vector
 !$omp distribute parallel do
     do m=1,mme
