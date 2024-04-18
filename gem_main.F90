@@ -1028,7 +1028,7 @@ subroutine cpush(n,ns)
 
 start_cpush_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams map(tofrom:myke,mynos,myavewi,myefl_es,mypfl_es)
+!$omp target teams map(tofrom:myke,mynos,myavewi,myefl_es,mypfl_es,myefl_em,mypfl_em)
     !$acc loop gang vector private(rhox,rhoy,aparp)
 !$omp distribute parallel do private(rhox,rhoy,aparp)
     do m=1,mm(ns)
@@ -3997,7 +3997,7 @@ subroutine cint(n)
     mynovpar = 0
 start_cint_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams map(tofrom:mynowe,mynovpar,myke,mytotn,mytrap,myptrp,myavewe,myefl_es,mypfl_es)
+!$omp target teams map(tofrom:mynowe,mynovpar,myke,mytotn,mytrap,myptrp,myavewe,myefl_es,mypfl_es,myefl_em,mypfl_em)
     !$acc loop gang vector
 !$omp distribute parallel do
     do m=1,mme
