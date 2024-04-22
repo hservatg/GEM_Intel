@@ -420,7 +420,7 @@ start_tm=MPI_WTIME()
     s_buf_length=0
 !$acc parallel loop gang vector reduction(+:s_buf_length) present(s_counts) copyout(s_buf_length) 
 !$omp target teams distribute parallel do  reduction(+:s_buf_length)&
-!$omp map(from:s_buf_length) map(present,alloc:s_counts)
+!$omp map(present,alloc:s_counts)
     do i=0,nvp-1
        s_buf_length=s_buf_length+s_counts(i)
     enddo
