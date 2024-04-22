@@ -14,7 +14,7 @@ r0a=0.5       !r0/a; center of the radial domain
 lymult=16      !the lowest nonzero toroidal mode number, Ly=2*pi*r0/q0/lymult
 jcnt=3       !number of toroidal mode numbers.  +n and -n count as two different modes, plus the n=0 mode
 dt=.31358384000000000000         !times steps in units of omega_u=eB/mp
-nm=50       !total no of times steps
+nm=100       !total no of times steps
 
 amp=1e-23      !amplitude of initial weight defined in loading (loadi and ldel)
 isg=0.0       !split weigh factor, almost always 1.0
