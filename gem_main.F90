@@ -2185,12 +2185,13 @@ subroutine gkps(nstep,ip)
 !    !$omp parallel do private(k,j,myj)
 !#endif // defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
 
+!$omp target enter data map(alloc:INFO) map(to:mxg,ipivg)
     do i = 0,jcnt*2-1
         k = int(i/jcnt)
         j = i-k*jcnt
         myj=jft(j)
         sl(1:imx-1,j,k) = v(1:imx-1,j,k)
-        !$omp target data map(tofrom:mxg,ipivg,sl,INFO)
+        !$omp target data map(tofrom:sl)
         !$omp dispatch
         call ZGETRS('N',imx-1,1,mxg(:,:,j,k),imx-1,ipivg(:,:,j,k), &
             sl(:,j,k),imx-1,INFO) 
@@ -2198,6 +2199,7 @@ subroutine gkps(nstep,ip)
         temp3dxy(1:imx-1,myj,k) = sl(1:imx-1,j,k)
         temp3dxy(0,myj,k) = 0.
     end do
+!$omp target exit data map(delete:INFO) map(release:mxg,ipivg)
 
     !  from rho(kx,ky) to phi(kx,ky)
     do k = 0,1
@@ -2561,12 +2563,13 @@ subroutine ezamp(nstep,ip)
 !    !$omp parallel do private(k,j,myj)
 !#endif // defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
 
+!$omp target enter data map(alloc:INFO) map(to:mxa,ipiva)
 do i = 0,jcnt*2-1
         k = int(i/jcnt)
         j = i-k*jcnt
         myj=jft(j)
         sl(1:imx-1,j,k) = v(1:imx-1,j,k)
-        !$omp target data map(tofrom:mxa,ipiva,INFO,sl)
+        !$omp target data map(tofrom:sl)
         !$omp dispatch
         call ZGETRS('N',imx-1,1,mxa(:,:,j,k),imx-1,ipiva(:,:,j,k), &
             sl(:,j,k),imx-1,INFO) 
@@ -2574,6 +2577,7 @@ do i = 0,jcnt*2-1
         temp3dxy(1:imx-1,myj,k) = sl(1:imx-1,j,k)
         temp3dxy(0,myj,k) = 0.
     end do
+!$omp target exit data map(delete:INFO) map(release:mxa,ipiva)
 
     !  from rho(kx,ky) to phi(kx,ky)
     do k = 0,1
@@ -4601,12 +4605,13 @@ subroutine dpdt(ip)
 !#if defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
 !    !$omp parallel do private(k,j,myj)
 !#endif // defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
+!$omp target enter data map(alloc:INFO) map(to:mxd,ipivd)
     do i = 0,jcnt*2-1
         k = int(i/jcnt)
         j = i-k*jcnt
         myj=jft(j)
         sl(1:imx-1,j,k) = v(1:imx-1,j,k)
-        !$omp target data map(tofrom:mxd,ipivd,INFO,sl)
+        !$omp target data map(tofrom:sl)
         !$omp dispatch
         call ZGETRS('N',imx-1,1,mxd(:,:,j,k),imx-1,ipivd(:,:,j,k), &
             sl(:,j,k),imx-1,INFO) 
@@ -4614,6 +4619,7 @@ subroutine dpdt(ip)
         temp3dxy(1:imx-1,myj,k) = sl(1:imx-1,j,k)
         temp3dxy(0,myj,k) = 0.
     end do
+!$omp target exit data map(delete:INFO) map(release:mxd,ipivd)
 
     !  from rho(kx,ky) to phi(kx,ky)
     do k = 0,1
@@ -6802,6 +6808,7 @@ subroutine blendf
         end do
     end do
 
+    !$omp target enter data map(alloc:work,INFO,IPIV)
     do i = 0,imx-1
         do j = 0,jmx-1
             do m1 = 1,nb
@@ -6818,7 +6825,7 @@ subroutine blendf
             !            call F07AWF(nb,tmp,nb,IPIV,work,100,INFO)
             !  call by lapack name instead
 
-            !$omp target data map(tofrom:tmp,IPIV,INFO,work)
+            !$omp target data map(tofrom:tmp)
             !$omp dispatch
             call ZGETRF(nb,nb,tmp,nb,IPIV,INFO)
             !$omp dispatch
@@ -6832,6 +6839,7 @@ subroutine blendf
             end do
         end do
     end do
+    !$omp target exit data map(delete:work,INFO,IPIV)
 
     return
     if(myid==0)then
