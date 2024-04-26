@@ -9681,7 +9681,7 @@ subroutine gkps_init
 !        !$omp parallel do private(k,j)
 !#endif // defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
 
-        !$omp target data map(tofrom:mxg,ipivg,INFO)
+        !$omp target data map(tofrom:mxg) map(from:ipivg) map(alloc:INFO)
         do i = 0,jcnt*2-1
             k = int(i/jcnt)
             j = i-k*jcnt
@@ -9842,7 +9842,7 @@ subroutine ezamp_init
 !        !$omp parallel do private(k,j)
 !#endif // defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
 
-        !$omp target data map(tofrom:mxa,ipiva,INFO)
+        !$omp target data map(tofrom:mxa) map(from:ipiva) map(alloc:INFO)
         do i = 0,jcnt*2-1
             k = int(i/jcnt)
             j = i-k*jcnt
@@ -10010,7 +10010,7 @@ subroutine dpdt_init
 !        !$omp parallel do private(k,j)
 !#endif // defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
 
-        !$omp target data map(tofrom:mxd,ipivd,INFO)
+        !$omp target data map(tofrom:mxd) map(from:ipivd) map(alloc:INFO)
         do i = 0,jcnt*2-1
             k = int(i/jcnt)
             j = i-k*jcnt
