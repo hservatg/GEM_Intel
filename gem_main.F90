@@ -654,7 +654,9 @@ subroutine ppush(n,ns)
 
     start_ppush_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams map(tofrom:mynopi)
+!$omp target teams map(tofrom:mynopi) &
+!$omp   map(to:ex,ey,ez,delbx,delby,dpdz,dadz,avwixeps,avwixez,apar)
+!! HSG EXPLICIT from IMPLICIT ^^
     !$acc loop gang vector private(rhox,rhoy)
 !$omp distribute parallel do private(rhox,rhoy)
     do m=1,mm(ns)
@@ -1028,7 +1030,9 @@ subroutine cpush(n,ns)
 
 start_cpush_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams map(tofrom:myke,mynos,myavewi,myefl_es,mypfl_es,myefl_em,mypfl_em)
+!$omp target teams map(tofrom:myke,mynos,myavewi,myefl_es,mypfl_es,myefl_em,mypfl_em) &
+!$omp   map(to:ex,ey,ez,delbx,delby,dpdz,dadz,avwixeps,avwixez,apar)
+!! HSG EXPLICIT from IMPLICIT ^^
     !$acc loop gang vector private(rhox,rhoy,aparp)
 !$omp distribute parallel do private(rhox,rhoy,aparp)
     do m=1,mm(ns)
@@ -3542,7 +3546,9 @@ subroutine pint
 
 start_pint_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams map(tofrom:myopz,myoen,myavptch,myaven)
+!$omp target teams map(tofrom:myopz,myoen,myavptch,myaven) &
+!$omp   map(to:ex,ey,ez,delbx,delby,dpdz,dadz,apar,phi,dphidt)
+!! HSG EXPLICIT from IMPLICIT ^^
     !$acc loop gang vector
 !$omp distribute parallel do
     do m=1,mme
@@ -4001,7 +4007,9 @@ subroutine cint(n)
     mynovpar = 0
 start_cint_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams map(tofrom:mynowe,mynovpar,myke,mytotn,mytrap,myptrp,myavewe,myefl_es,mypfl_es,myefl_em,mypfl_em)
+!$omp target teams map(tofrom:mynowe,mynovpar,myke,mytotn,mytrap,myptrp,myavewe,myefl_es,mypfl_es,myefl_em,mypfl_em) &
+!$omp   map(to:ex,ey,ez,delbx,delby,dpdz,dadz,apar,phi,dphidt)
+!! HSG EXPLICIT from IMPLICIT ^^
     !$acc loop gang vector
 !$omp distribute parallel do
     do m=1,mme
@@ -4716,7 +4724,9 @@ start_jie_tm = MPI_WTIME()
         !$acc data copy(myjpar,myjpex,myjpey,mydnidt)
 !$omp target data map(tofrom:myjpar,myjpex,myjpey,mydnidt)
         !$acc parallel 
-!$omp target teams
+!$omp target teams &
+!$omp   map(to:ex,ey,delbx,delby,apar)
+!! HSG EXPLICIT from IMPLICIT ^^
         !$acc loop gang vector private(rhox,rhoy) private(gdum,aparp)
 !$omp distribute parallel do private(rhox,rhoy,gdum,aparp)
         do m=1,mm(ns)
@@ -4964,7 +4974,9 @@ start_jie_tm = MPI_WTIME()
 !$acc data copy(myupex,myupey,myupazd,mydnedt)
 !$omp target data map(tofrom:myupex,myupey,myupazd,mydnedt)
 !$acc parallel 
-!$omp target teams
+!$omp target teams &
+!$omp   map(to:ex,ey,ez,delbx,delby,apar,phi)
+!! HSG EXPLICIT from IMPLICIT ^^
 !$acc loop gang vector private(gdum)
 !$omp distribute parallel do private(gdum)
     do m=1,mme
@@ -5910,7 +5922,9 @@ start_jpar0_tm = MPI_WTIME()
 !$acc data copy(myupa,myupa0,myden0)
 !$omp target data map(tofrom:myupa,myupa0,myden0)
 !$acc parallel 
-!$omp target teams
+!$omp target teams &
+!$omp   map(to:apar)
+!! HSG EXPLICIT from IMPLICIT ^^
 !$acc loop gang vector
 !$omp distribute parallel do
     do m=1,mme
@@ -6163,7 +6177,9 @@ subroutine den0_phi(ip,n,it)
     end if
 start_den0_tm = MPI_WTIME()
 !$acc parallel 
-!$omp target teams
+!$omp target teams &
+!$omp   map(to:phi)
+!! HSG EXPLICIT from IMPLICIT ^^
 !$acc loop gang vector
 !$omp distribute parallel do
     do m=1,mme
