@@ -223,21 +223,29 @@ contains
          jion(0:nxpp,0:jmx,0:1),jionx(0:nxpp,0:jmx,0:1), &
          jiony(0:nxpp,0:jmx,0:1))
     allocate( phi(0:nxpp,0:jmx,0:1))
+!$omp target enter data map(phi)
+
     allocate( drhodt(0:nxpp,0:jmx,0:1),dnedt(0:nxpp,0:jmx,0:1))
     allocate( dnidt(nsmx,0:nxpp,0:jmx,0:1),jpar(nsmx,0:nxpp,0:jmx,0:1),  &
          jpex(nsmx,0:nxpp,0:jmx,0:1),jpey(nsmx,0:nxpp,0:jmx,0:1))
     allocate( dphidt(0:nxpp,0:jmx,0:1))
 
     dphidt = 0 !$ HSG hacks (2)
-    !$omp target enter data map(dphidt)
+!$omp target enter data map(dphidt)
 
     ALLOCATE( ex(0:nxpp,0:jmx,0:1)) 
     ALLOCATE( ey(0:nxpp,0:jmx,0:1)) 
     ALLOCATE( ez(0:nxpp,0:jmx,0:1))
+!$omp target enter data map(alloc:ex,ey,ez)
     ALLOCATE( dpdz(0:nxpp,0:jmx,0:1),dadz(0:nxpp,0:jmx,0:1))
+!$omp target enter data map(alloc:dpdz,dadz)
     ALLOCATE( delbx(0:nxpp,0:jmx,0:1),delby(0:nxpp,0:jmx,0:1))
+!$omp target enter data map(alloc:delbx,delby)
+
     ALLOCATE( xg(0:nxpp),yg(0:jmx),zg(0:1))
     allocate( apar(0:nxpp,0:jmx,0:1),dene(0:nxpp,0:jmx,0:1))
+!$omp target enter data map(alloc:apar)
+
     allocate( upar(0:nxpp,0:jmx,0:1),upart(0:nxpp,0:jmx,0:1),upex(0:nxpp,0:jmx,0:1), &
          upey(0:nxpp,0:jmx,0:1),upa0(0:nxpp,0:jmx,0:1), &
          den0(0:nxpp,0:jmx,0:1),upazd(0:nxpp,0:jmx,0:1),&
@@ -247,10 +255,12 @@ contains
     allocate( ggxdgy(0:nxpp,0:1),ggy2(0:nxpp,0:1),ggx(0:nxpp,0:1))
     allocate (gn0e(0:nxpp),gt0e(0:nxpp),gt0i(0:nxpp),avap(0:nxpp),dtez(0:imx))
     allocate (gn0s(1:5,0:nxpp),gt0s(1:5,0:nxpp),dtiz(1:5,0:imx))
+!$omp target enter data map(dtiz,dtez)
 
     if(ipbm==1)then
        allocate(apars(0:nxpp,0:jmx,0:1),aparss(0:nxpp,0:jmx,0:1),aparh(0:nxpp,0:jmx,0:1),lapapar(0:nxpp,0:jmx,0:1), &
             delbxh(0:nxpp,0:jmx,0:1),delbyh(0:nxpp,0:jmx,0:1),dahdz(0:nxpp,0:jmx,0:1),aparh_save(0:nxpp,0:jmx,0:1))
+!$omp target enter data map(alloc:aparh,dahdz,delbxh,delbyh)
     end if
     !          particle array declarations
     !allocate( mu(nsmx,1:mmx),xii(nsmx,1:mmx),pzi(nsmx,1:mmx), &
@@ -294,7 +304,11 @@ contains
 
     allocate(avwexeps(0:nxsrc-1,0:nesrc-1),fesrc(0:nxsrc-1),dnesrc(0:nxsrc-1),gmrkr(nsmx,0:nxsrc-1,0:nesrc-1),gmrkre(0:nxsrc-1,0:nesrc-1),avwexez(0:nxsrc-1,0:nesrc-1))
     allocate(avwixeps(nsmx,0:nxsrc-1,0:nesrc-1),fisrc(nsmx,0:nxsrc-1),dnisrc(nsmx,0:nxsrc-1),avwixez(nsmx,0:nxsrc-1,0:nesrc-1))
+!$omp target enter data map(alloc:avwexeps,gmrkr,gmrkre,fisrc,dnisrc,avwixeps, &
+!$omp fesrc,dnesrc,avwixez,avwexez)
+
     allocate(dnisrcz(nsmx,0:nxsrc-1),dnesrcz(0:nxsrc-1))
+!$omp target enter data map(alloc:dnisrcz,dnesrcz)
     
 !    Various diagnostic arrays and scalars
 !    plotting constants

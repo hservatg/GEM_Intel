@@ -654,9 +654,7 @@ subroutine ppush(n,ns)
 
     start_ppush_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams map(tofrom:mynopi) &
-!$omp   map(to:ex,ey,ez,delbx,delby,dpdz,dadz,avwixeps,avwixez,apar)
-!! HSG EXPLICIT from IMPLICIT ^^
+!$omp target teams map(tofrom:mynopi)
     !$acc loop gang vector private(rhox,rhoy)
 !$omp distribute parallel do private(rhox,rhoy)
     do m=1,mm(ns)
@@ -1030,9 +1028,7 @@ subroutine cpush(n,ns)
 
 start_cpush_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams map(tofrom:myke,mynos,myavewi,myefl_es,mypfl_es,myefl_em,mypfl_em) &
-!$omp   map(to:ex,ey,ez,delbx,delby,dpdz,dadz,avwixeps,avwixez,apar)
-!! HSG EXPLICIT from IMPLICIT ^^
+!$omp target teams map(tofrom:myke,mynos,myavewi,myefl_es,mypfl_es,myefl_em,mypfl_em)
     !$acc loop gang vector private(rhox,rhoy,aparp)
 !$omp distribute parallel do private(rhox,rhoy,aparp)
     do m=1,mm(ns)
@@ -1459,6 +1455,9 @@ subroutine grad(ip)
     ex(:,:,:) = -ux(:,:,:)
     ey(:,:,:) = -uy(:,:,:)
 
+!$omp target update to(ex)
+!$omp target update to(ey)
+
     delbx = 0.
     delby = 0.
     if(ifluid.eq.1)then
@@ -1474,8 +1473,11 @@ subroutine grad(ip)
                 delbxh(:,:,:) = uy(:,:,:)
                 delbyh(:,:,:) = -ux(:,:,:)
             end if
+            !$omp target update to(delbxh,delbyh)
         end if
     end if
+
+!$omp target update to(delbx,delby)
 
     !      return
 end subroutine grad
@@ -1651,6 +1653,7 @@ tot_grid_tm = tot_grid_tm + end_grid_tm - start_grid_tm
         do i = 0,im
             dtiz(ns,i) = (dtz(i)-gt0s(ns,i)*dnz(i))/gn0s(ns,i)
         end do
+!$omp target update to(dtiz)
 
         !diagnostic arrays rarely need to be done every step, should be done prior to it is written out
 
@@ -1892,6 +1895,8 @@ tot_grid_tm = tot_grid_tm + end_grid_tm - start_grid_tm
     do i = 0,im
         dtez(i) = (dtz(i)-gt0e(i)*dnz(i))/gn0e(i)
     end do
+
+!$omp target update to(dtez)
 
     do i = 0,im
         do j = 0,jm
@@ -2241,6 +2246,8 @@ subroutine gkps(nstep,ip)
     call enfz(phi(:,:,:))
     if(idg==1)write(*,*)'pass enfz', myid
 
+!$omp target update to(phi)
+
     !      return
 end subroutine gkps
 
@@ -2302,6 +2309,8 @@ subroutine eqmo(ip)
         enddo
     enddo
 
+!$omp target update to(ez)
+
     rbfs = apar(:,:,0)
 
     call MPI_SENDRECV(rbfs(0,0),(imx+1)*(jmx+1), &
@@ -2330,6 +2339,8 @@ subroutine eqmo(ip)
     enddo
 
     dpdz(:,:,:) = -ez(:,:,:)
+
+!$omp target update to(dadz,dpdz)
 
     if (ipbm == 1) then
         dahdz = 0.
@@ -2368,6 +2379,9 @@ subroutine eqmo(ip)
                     +weightmn(i)*rbfr(i,jmn(i,j))))/(2.*dz)
             enddo
         enddo
+
+    !$omp target update to(dahdz)
+
     end if
 
 
@@ -2621,6 +2635,8 @@ do i = 0,jcnt*2-1
     call enfxy(apar(:,:,:))
     call enfz(apar(:,:,:))
     !      call filter(apar(:,:,:))
+
+!$omp target update to(apar)
 
     !      return
 end subroutine ezamp
@@ -3546,9 +3562,7 @@ subroutine pint
 
 start_pint_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams map(tofrom:myopz,myoen,myavptch,myaven) &
-!$omp   map(to:ex,ey,ez,delbx,delby,dpdz,dadz,apar,phi,dphidt)
-!! HSG EXPLICIT from IMPLICIT ^^
+!$omp target teams map(tofrom:myopz,myoen,myavptch,myaven)
     !$acc loop gang vector
 !$omp distribute parallel do
     do m=1,mme
@@ -4007,9 +4021,7 @@ subroutine cint(n)
     mynovpar = 0
 start_cint_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams map(tofrom:mynowe,mynovpar,myke,mytotn,mytrap,myptrp,myavewe,myefl_es,mypfl_es,myefl_em,mypfl_em) &
-!$omp   map(to:ex,ey,ez,delbx,delby,dpdz,dadz,apar,phi,dphidt)
-!! HSG EXPLICIT from IMPLICIT ^^
+!$omp target teams map(tofrom:mynowe,mynovpar,myke,mytotn,mytrap,myptrp,myavewe,myefl_es,mypfl_es,myefl_em,mypfl_em)
     !$acc loop gang vector
 !$omp distribute parallel do
     do m=1,mme
@@ -4668,6 +4680,8 @@ subroutine dpdt(ip)
     if(idpbf==1)call fltx(dphidt(:,:,:),1,1)
     if(idpbf==0)call filter(dphidt(:,:,:))
 
+!$omp target update to (dphidt)
+
     if(idg==1)write(*,*)'pass enfz', myid
 
     !      return
@@ -4724,9 +4738,7 @@ start_jie_tm = MPI_WTIME()
         !$acc data copy(myjpar,myjpex,myjpey,mydnidt)
 !$omp target data map(tofrom:myjpar,myjpex,myjpey,mydnidt)
         !$acc parallel 
-!$omp target teams &
-!$omp   map(to:ex,ey,delbx,delby,apar)
-!! HSG EXPLICIT from IMPLICIT ^^
+!$omp target teams
         !$acc loop gang vector private(rhox,rhoy) private(gdum,aparp)
 !$omp distribute parallel do private(rhox,rhoy,gdum,aparp)
         do m=1,mm(ns)
@@ -4974,9 +4986,7 @@ start_jie_tm = MPI_WTIME()
 !$acc data copy(myupex,myupey,myupazd,mydnedt)
 !$omp target data map(tofrom:myupex,myupey,myupazd,mydnedt)
 !$acc parallel 
-!$omp target teams &
-!$omp   map(to:ex,ey,ez,delbx,delby,apar,phi)
-!! HSG EXPLICIT from IMPLICIT ^^
+!$omp target teams
 !$acc loop gang vector private(gdum)
 !$omp distribute parallel do private(gdum)
     do m=1,mme
@@ -5632,6 +5642,9 @@ subroutine poisson(n,ip)
             end do
         end do
     end if
+
+!$omp target update to(phi)
+
     myrmsphi=0.
     do k=0,mykm-1
         do j=0,jm-1
@@ -5698,12 +5711,14 @@ subroutine ampere(n,ip)
         if(ip==0)jcorr = 1
         if(rma(iter)/rma(iter-1)>1.1)then
             apar(:,:,:) = 0.
+            !$omp target update to(apar)
             if(ip==1)jpred = 0
             if(ip==0)jcorr = 0
             rmsapa(n) = 0.
         end if
         if(n>100.and.rma(iter)/rmaa>1.5)then
             apar(:,:,:) = 0.
+            !$omp target update to(apar)
             if(ip==1)jpred = -1
             if(ip==0)jcorr = -1
             rmsapa(n) = 0.
@@ -5713,6 +5728,7 @@ subroutine ampere(n,ip)
     !MVPT
     if(ipbm==1)then
         aparh = apar
+!$omp target update to(aparh)
         apar = aparh+apars
     end if
     !if(iperi==0 .and. iapbf==0 .and. ipbm==1)call fltx(aparh(:,:,:),0,1)
@@ -5720,8 +5736,14 @@ subroutine ampere(n,ip)
     !if(iperi==0 .and. iapbf==1)call fltx(apar(:,:,:),1,1)
     !if(iperi==1 .and. iapbf==1)call flty(apar(:,:,:),1)
 
-    if(iapbf==0 .and. ipbm==1)call fltm(aparh(:,:,:))
-    if(iapbf==0 .and. ipbm==0)call filter(apar(:,:,:))    
+    if(iapbf==0 .and. ipbm==1) then
+      call fltm(aparh(:,:,:))
+      !$omp target update to(aparh)
+    endif
+    if(iapbf==0 .and. ipbm==0) then
+      call filter(apar(:,:,:))    
+      !$omp target update to (apar)
+    endif
     !remove zonal field
     if(izonal==0)then
         do i=0,im-1
@@ -5748,6 +5770,7 @@ subroutine ampere(n,ip)
                 end do
             end do
         end do
+        !$omp target update to(apar)
     end if
     myrmsapa=0.
     do k=0,mykm-1
@@ -5913,6 +5936,7 @@ subroutine jpar0(ip,n,it,itp)
     !      return
     if(it.eq.1)then
         apar(:,:,:) = 0.
+        !$omp target update to(apar)
         upa0(:,:,:) = 0.
         upa00(:,:,:) = 0.
         den0apa(:,:,:) = 0.
@@ -5922,9 +5946,7 @@ start_jpar0_tm = MPI_WTIME()
 !$acc data copy(myupa,myupa0,myden0)
 !$omp target data map(tofrom:myupa,myupa0,myden0)
 !$acc parallel 
-!$omp target teams &
-!$omp   map(to:apar)
-!! HSG EXPLICIT from IMPLICIT ^^
+!$omp target teams
 !$acc loop gang vector
 !$omp distribute parallel do
     do m=1,mme
@@ -6172,14 +6194,13 @@ subroutine den0_phi(ip,n,it)
     den0 = 0.
     if(it.eq.1)then
         phi(:,:,:) = 0.
+!$omp target update to(phi)
         den0(:,:,:) = 0.
         return
     end if
 start_den0_tm = MPI_WTIME()
 !$acc parallel 
-!$omp target teams &
-!$omp   map(to:phi)
-!! HSG EXPLICIT from IMPLICIT ^^
+!$omp target teams
 !$acc loop gang vector
 !$omp distribute parallel do
     do m=1,mme
@@ -8421,6 +8442,9 @@ subroutine gkpsL(nstep,ip)
             end do
         end do
     end do
+
+!$omp target update to(phi)
+
     !      return
 end subroutine gkpsL
 
@@ -8626,6 +8650,8 @@ subroutine ezampL(nstep,ip)
     call enfxy(apar(:,:,:))
     call enfz(apar(:,:,:))
     !      call filter(apar(:,:,:))
+
+!$omp target update to(apar)
 
     !      return
 end subroutine ezampL
@@ -8873,6 +8899,8 @@ subroutine dpdtL(ip)
     call enfz(dphidt)
     !      if(idpbf==0)call filter(dphidt(:,:,:))
     if(idpbf==1)call flty(dphidt(:,:,:),1)
+
+!$omp target update to(dphidt)
 
     !      return
 end subroutine dpdtL
@@ -10636,6 +10664,8 @@ tot_weatxeps_tm = tot_weatxeps_tm + end_weatxeps_tm - start_weatxeps_tm
         end do
     end do
 
+!$omp target update to(gmrkre)
+
     !g diagnostics, gtilde=g/volume(x,eps,dx,deps)
     if(igtilde==1)then
         if(myid.eq.master)then
@@ -10686,6 +10716,8 @@ tot_weatxeps_tm = tot_weatxeps_tm + end_weatxeps_tm - start_weatxeps_tm
         dnesrc(m) = dn
     end do
 
+!$omp target update to(fesrc,dnesrc)
+
     !  goto 200
 
     !keep only low kr componentts
@@ -10708,6 +10740,8 @@ tot_weatxeps_tm = tot_weatxeps_tm + end_weatxeps_tm - start_weatxeps_tm
         end do
     end do
 
+!$omp target update to(avwexez)
+
     !remove low kr in dnesrc
     do k = 1, nzsrc
         dum = 0.
@@ -10723,6 +10757,8 @@ tot_weatxeps_tm = tot_weatxeps_tm + end_weatxeps_tm - start_weatxeps_tm
         end do
         dnesrcz(i) = dum
     end do
+
+!$omp target update to(dnesrcz)
 
     200 continue  
 end subroutine weatxeps
@@ -10799,6 +10835,9 @@ tot_wiatxeps_tm = tot_wiatxeps_tm + end_wiatxeps_tm - start_wiatxeps_tm
         MPI_SUM,MPI_COMM_WORLD,ierr)
 
     avwixeps(ns,:,:) = avw(:,:)/(g(:,:)+1e-4)
+
+!$omp target update to(avwixeps)
+
     ntot = 0
     do i = 0,nxsrc-1
         do j = 0,nesrc-1
@@ -10831,6 +10870,8 @@ tot_wiatxeps_tm = tot_wiatxeps_tm + end_wiatxeps_tm - start_wiatxeps_tm
             if(g(i,j)==0)gmrkr(ns,i,j) = gdum
         end do
     end do
+
+!$omp target update to(gmrkr)
 
     !g diagnostics, gtilde=g/volume(x,eps,dx,deps)
     if(igtilde==1)then
@@ -10882,6 +10923,8 @@ tot_wiatxeps_tm = tot_wiatxeps_tm + end_wiatxeps_tm - start_wiatxeps_tm
         dnisrc(ns,m) = dn
     end do
 
+!$omp target update to(fisrc,dnisrc)
+
     !  goto 200
 
     !keep only low kr componentts
@@ -10904,6 +10947,8 @@ tot_wiatxeps_tm = tot_wiatxeps_tm + end_wiatxeps_tm - start_wiatxeps_tm
         end do
     end do
 
+!$omp target update to(avwixez)
+
     !remove low kr in dnisrc
     do k = 1, nzsrc
         dum = 0.
@@ -10919,6 +10964,8 @@ tot_wiatxeps_tm = tot_wiatxeps_tm + end_wiatxeps_tm - start_wiatxeps_tm
         end do
         dnisrcz(ns,i) = dum
     end do
+
+!$omp target update to(dnisrcz)
 
     200 continue  
 end subroutine wiatxeps
@@ -10982,6 +11029,7 @@ subroutine pbm_pb(ip)
         apars = aparh + apars ! apars_new  = apar_h_old + apar_s_old
         aparh_save=aparh
         aparh = 0. ! aparh = 0. (t=n)
+        !$omp target update to(aparh)
         !call accumulate(n,2)
         !call ampere(n,2)
         !apars = apar
