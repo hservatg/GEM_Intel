@@ -2157,7 +2157,7 @@ subroutine gkps(nstep,ip)
     INTEGER :: l1,m1,myk,myj,ix,ikx
     COMPLEX :: temp3dxy(0:imx-1,0:jmx-1,0:1),v(0:imx-1,0:jcnt-1,0:1)
     COMPLEX :: sbuf(0:imx*jcnt*2-1),rbuf(0:imx*jmx*2-1)
-    COMPLEX :: sl(1:imx-1,0:jcnt-1,0:1)
+    COMPLEX :: n_sl(1:imx-1)
     COMPLEX :: aphik(0:nxpp-1),myaphik(0:nxpp-1)
     real :: myaph(0:nxpp),aph(0:nxpp),u(0:imx,0:jmx,0:1)
     complex :: cdum
@@ -2199,13 +2199,13 @@ subroutine gkps(nstep,ip)
         k = int(i/jcnt)
         j = i-k*jcnt
         myj=jft(j)
-        sl(1:imx-1,j,k) = v(1:imx-1,j,k)
-        !$omp target data map(tofrom:sl)
+        n_sl(1:imx-1) = v(1:imx-1,j,k)
+        !$omp target data map(tofrom:n_sl)
         !$omp dispatch
         call ZGETRS('N',imx-1,1,mxg(:,:,j,k),imx-1,ipivg(:,:,j,k), &
-            sl(:,j,k),imx-1,INFO) 
+            n_sl(:),imx-1,INFO) 
         !$omp end target data
-        temp3dxy(1:imx-1,myj,k) = sl(1:imx-1,j,k)
+        temp3dxy(1:imx-1,myj,k) = n_sl(1:imx-1)
         temp3dxy(0,myj,k) = 0.
     end do
 !$omp target exit data map(delete:INFO)
@@ -2535,7 +2535,7 @@ subroutine ezamp(nstep,ip)
     INTEGER :: l1,m1,myk,myj,ix,ikx,iext
     COMPLEX :: temp3dxy(0:imx-1,0:jmx-1,0:1),v(0:imx-1,0:jcnt-1,0:1)
     COMPLEX :: sbuf(0:imx*jcnt*2-1),rbuf(0:imx*jmx*2-1)
-    COMPLEX :: sl(1:imx-1,0:jcnt-1,0:1)
+    COMPLEX :: n_sl(1:imx-1)
     real :: dum,u(0:imx,0:jmx,0:1)
     real :: grp,gthp,gxdgyp,dydrp,qhatp,grdgtp,bfldp
     real :: wx0,wx1,wz0,wz1
@@ -2586,13 +2586,13 @@ do i = 0,jcnt*2-1
         k = int(i/jcnt)
         j = i-k*jcnt
         myj=jft(j)
-        sl(1:imx-1,j,k) = v(1:imx-1,j,k)
-        !$omp target data map(tofrom:sl)
+        n_sl(1:imx-1) = v(1:imx-1,j,k)
+        !$omp target data map(tofrom:n_sl)
         !$omp dispatch
         call ZGETRS('N',imx-1,1,mxa(:,:,j,k),imx-1,ipiva(:,:,j,k), &
-            sl(:,j,k),imx-1,INFO) 
+            n_sl(:),imx-1,INFO) 
         !$omp end target data
-        temp3dxy(1:imx-1,myj,k) = sl(1:imx-1,j,k)
+        temp3dxy(1:imx-1,myj,k) = n_sl(1:imx-1)
         temp3dxy(0,myj,k) = 0.
     end do
 !$omp target exit data map(delete:INFO)
@@ -4612,7 +4612,7 @@ subroutine dpdt(ip)
     INTEGER :: l1,m1,myk,myj,ix,ikx
     complex :: temp3dxy(0:imx-1,0:jmx-1,0:1),v(0:imx-1,0:jcnt-1,0:1)
     complex :: sbuf(0:imx*jcnt*2-1),rbuf(0:imx*jmx*2-1)
-    complex :: sl(1:imx-1,0:jcnt-1,0:1)
+    complex :: n_sl(1:imx-1)
     complex :: cdum
     real :: dbdrp,dbdtp,grcgtp,bfldp,fp,radiusp,dydrp,qhatp,psipp,jfnp
     real :: grp,gxdgyp,grdgtp,gthp
@@ -4630,13 +4630,13 @@ subroutine dpdt(ip)
         k = int(i/jcnt)
         j = i-k*jcnt
         myj=jft(j)
-        sl(1:imx-1,j,k) = v(1:imx-1,j,k)
-        !$omp target data map(tofrom:sl)
+        n_sl(1:imx-1) = v(1:imx-1,j,k)
+        !$omp target data map(tofrom:n_sl)
         !$omp dispatch
         call ZGETRS('N',imx-1,1,mxd(:,:,j,k),imx-1,ipivd(:,:,j,k), &
-            sl(:,j,k),imx-1,INFO) 
+            n_sl(:),imx-1,INFO) 
         !$omp end target data
-        temp3dxy(1:imx-1,myj,k) = sl(1:imx-1,j,k)
+        temp3dxy(1:imx-1,myj,k) = n_sl(1:imx-1)
         temp3dxy(0,myj,k) = 0.
     end do
 !$omp target exit data map(delete:INFO)
