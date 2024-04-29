@@ -2194,7 +2194,7 @@ subroutine gkps(nstep,ip)
 !    !$omp parallel do private(k,j,myj)
 !#endif // defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
 
-!$omp target enter data map(alloc:INFO) map(to:mxg,ipivg)
+!$omp target enter data map(alloc:INFO)
     do i = 0,jcnt*2-1
         k = int(i/jcnt)
         j = i-k*jcnt
@@ -2208,7 +2208,7 @@ subroutine gkps(nstep,ip)
         temp3dxy(1:imx-1,myj,k) = sl(1:imx-1,j,k)
         temp3dxy(0,myj,k) = 0.
     end do
-!$omp target exit data map(delete:INFO) map(release:mxg,ipivg)
+!$omp target exit data map(delete:INFO)
 
     !  from rho(kx,ky) to phi(kx,ky)
     do k = 0,1
@@ -2581,7 +2581,7 @@ subroutine ezamp(nstep,ip)
 !    !$omp parallel do private(k,j,myj)
 !#endif // defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
 
-!$omp target enter data map(alloc:INFO) map(to:mxa,ipiva)
+!$omp target enter data map(alloc:INFO)
 do i = 0,jcnt*2-1
         k = int(i/jcnt)
         j = i-k*jcnt
@@ -2595,7 +2595,7 @@ do i = 0,jcnt*2-1
         temp3dxy(1:imx-1,myj,k) = sl(1:imx-1,j,k)
         temp3dxy(0,myj,k) = 0.
     end do
-!$omp target exit data map(delete:INFO) map(release:mxa,ipiva)
+!$omp target exit data map(delete:INFO)
 
     !  from rho(kx,ky) to phi(kx,ky)
     do k = 0,1
@@ -4625,7 +4625,7 @@ subroutine dpdt(ip)
 !#if defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
 !    !$omp parallel do private(k,j,myj)
 !#endif // defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
-!$omp target enter data map(alloc:INFO) map(to:mxd,ipivd)
+!$omp target enter data map(alloc:INFO)
     do i = 0,jcnt*2-1
         k = int(i/jcnt)
         j = i-k*jcnt
@@ -4639,7 +4639,7 @@ subroutine dpdt(ip)
         temp3dxy(1:imx-1,myj,k) = sl(1:imx-1,j,k)
         temp3dxy(0,myj,k) = 0.
     end do
-!$omp target exit data map(delete:INFO) map(release:mxd,ipivd)
+!$omp target exit data map(delete:INFO)
 
     !  from rho(kx,ky) to phi(kx,ky)
     do k = 0,1
@@ -9710,6 +9710,9 @@ subroutine gkps_init
                 end do
             end do
         end do
+
+!$omp target update to(mxg)
+
         if(idg==1)then
             do i = 0,last
                 if(myid==i)then
@@ -9725,7 +9728,7 @@ subroutine gkps_init
 !        !$omp parallel do private(k,j)
 !#endif // defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
 
-        !$omp target data map(tofrom:mxg) map(from:ipivg) map(alloc:INFO)
+        !$omp target data map(alloc:INFO)
         do i = 0,jcnt*2-1
             k = int(i/jcnt)
             j = i-k*jcnt
@@ -9733,6 +9736,8 @@ subroutine gkps_init
             call ZGETRF(imx-1,imx-1,mxg(:,:,j,k),imx-1,ipivg(:,:,j,k),INFO )
         end do
         !$omp end target data
+
+!$omp target update from(mxg)
 
         call MPI_COMM_RANK(MPI_COMM_WORLD, i, j)
         print*, 'mpi rank=', i, 'INFO=', INFO, 'myid=', myid
@@ -9882,11 +9887,13 @@ subroutine ezamp_init
             end do
         end do
 
+!$omp target update to(mxa)
+
 !#if defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
 !        !$omp parallel do private(k,j)
 !#endif // defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
 
-        !$omp target data map(tofrom:mxa) map(from:ipiva) map(alloc:INFO)
+        !$omp target data map(alloc:INFO)
         do i = 0,jcnt*2-1
             k = int(i/jcnt)
             j = i-k*jcnt
@@ -9894,6 +9901,8 @@ subroutine ezamp_init
             call ZGETRF(imx-1,imx-1,mxa(:,:,j,k),imx-1,ipiva(:,:,j,k),INFO )
         end do
         !$omp end target data
+
+!$omp target update from(mxa,ipiva)
 
         open(20000+MyId,file=fname,form='unformatted',status='unknown')
         do i = 1,imx-1
@@ -10050,11 +10059,13 @@ subroutine dpdt_init
             end do
         end do
 
+!$omp target update to(mxd)
+
 !#if defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
 !        !$omp parallel do private(k,j)
 !#endif // defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
 
-        !$omp target data map(tofrom:mxd) map(from:ipivd) map(alloc:INFO)
+        !$omp target data map(alloc:INFO)
         do i = 0,jcnt*2-1
             k = int(i/jcnt)
             j = i-k*jcnt
@@ -10062,6 +10073,8 @@ subroutine dpdt_init
             call ZGETRF(imx-1,imx-1,mxd(:,:,j,k),imx-1,ipivd(:,:,j,k),INFO )
         end do
         !$omp end target data
+
+!$omp target update from(mxd)
 
         open(30000+MyId,file=fname,form='unformatted',status='unknown')
         do i = 1,imx-1

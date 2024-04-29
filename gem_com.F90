@@ -356,6 +356,8 @@ contains
 
     allocate(mxg(imx-1,imx-1,0:jcnt-1,0:1),mxa(imx-1,imx-1,0:jcnt-1,0:1),mxd(imx-1,imx-1,0:jcnt-1,0:1), &
              ipivg(imx-1,imx-1,0:jcnt-1,0:1),ipiva(imx-1,imx-1,0:jcnt-1,0:1),ipivd(imx-1,imx-1,0:jcnt-1,0:1))
+
+!$omp target enter data map(mxa,mxd,mxg,ipiva,ipivd,ipivg)
   end subroutine new_gem_com
 
 end module gem_com
