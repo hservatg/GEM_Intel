@@ -5929,9 +5929,7 @@ subroutine jpar0(ip,n,it,itp)
 
     !    electrons current due to f_M (p_para)
     vte = sqrt(amie*t0e(nr/2))
-    myupa = 0.
-    myupa0 = 0.
-    myden0 = 0.
+
     !      upa0(:,:,:) = apar(ip,:,:,:)
     !      return
     if(it.eq.1)then
@@ -5944,7 +5942,21 @@ subroutine jpar0(ip,n,it,itp)
     end if
 start_jpar0_tm = MPI_WTIME()
 !$acc data copy(myupa,myupa0,myden0)
-!$omp target data map(tofrom:myupa,myupa0,myden0)
+
+!$omp target enter data map(alloc:myupa,myupa0,myden0)
+
+!$omp target teams loop collapse(3)
+    do i = 0, imx
+      do j = 0, jmx
+        do k = 0, 1
+          myupa (i,j,k) = 0
+          myupa0(i,j,k) = 0
+          myden0(i,j,k) = 0
+        enddo
+      enddo
+    enddo
+
+
 !$acc parallel 
 !$omp target teams
 !$acc loop gang vector
@@ -6119,9 +6131,11 @@ start_jpar0_tm = MPI_WTIME()
 !$acc end parallel
 !$omp end target teams
 !$acc end data
-!$omp end target data
 end_jpar0_tm = MPI_WTIME()
 tot_jpar0_tm = tot_jpar0_tm + end_jpar0_tm - start_jpar0_tm
+
+!$omp target exit data map(from:myupa,myupa0,myden0)
+
     !   enforce periodicity
     if(itp==1)call enforce(myupa(:,:,:))
     if(itp==1)call enforce(myden0(:,:,:))
