@@ -1,0 +1,60 @@
+======================================================================================================================
+LIBOMPTARGET_PLUGIN_PROFILE(LEVEL_ZERO) for OMP DEVICE(0) Intel(R) Data Center GPU Max 1550, Thread 0
+----------------------------------------------------------------------------------------------------------------------
+Kernel 0                  : __omp_offloading_10302_6f89f7_cint__l4004
+Kernel 1                  : __omp_offloading_10302_6f89f7_cpush__l1031
+Kernel 2                  : __omp_offloading_10302_6f89f7_gem_pputil_mp_test_init_pmove__l108
+Kernel 3                  : __omp_offloading_10302_6f89f7_gem_pputil_mp_test_init_pmove__l136
+Kernel 4                  : __omp_offloading_10302_6f89f7_gem_pputil_mp_test_init_pmove__l151
+Kernel 5                  : __omp_offloading_10302_6f89f7_gem_pputil_mp_test_init_pmove__l165
+Kernel 6                  : __omp_offloading_10302_6f89f7_gem_pputil_mp_test_init_pmove__l189
+Kernel 7                  : __omp_offloading_10302_6f89f7_gem_pputil_mp_test_init_pmove__l208
+Kernel 8                  : __omp_offloading_10302_6f89f7_gem_pputil_mp_test_init_pmove__l267
+Kernel 9                  : __omp_offloading_10302_6f89f7_gem_pputil_mp_test_pmove__l397
+Kernel 10                 : __omp_offloading_10302_6f89f7_gem_pputil_mp_test_pmove__l422
+Kernel 11                 : __omp_offloading_10302_6f89f7_gem_pputil_mp_test_pmove__l481
+Kernel 12                 : __omp_offloading_10302_6f89f7_gem_pputil_mp_test_pmove__l518
+Kernel 13                 : __omp_offloading_10302_6f89f7_grid1__l1523
+Kernel 14                 : __omp_offloading_10302_6f89f7_grid1__l1677
+Kernel 15                 : __omp_offloading_10302_6f89f7_jpar0__l5913
+Kernel 16                 : __omp_offloading_10302_6f89f7_pbe__l11103
+Kernel 17                 : __omp_offloading_10302_6f89f7_pbi__l10999
+Kernel 18                 : __omp_offloading_10302_6f89f7_pint__l3545
+Kernel 19                 : __omp_offloading_10302_6f89f7_ppush__l657
+Kernel 20                 : __omp_offloading_10302_6f89f7_setw__l6367
+Kernel 21                 : __omp_offloading_10302_6f89f7_weatxeps__l10535
+Kernel 22                 : __omp_offloading_10302_6f89f7_wiatxeps__l10732
+----------------------------------------------------------------------------------------------------------------------
+                          : Host Time (msec)                        Device Time (msec)                      
+Name                      :      Total   Average       Min       Max     Total   Average       Min       Max     Count
+----------------------------------------------------------------------------------------------------------------------
+Compiling                 :   17736.75  17736.75  17736.75  17736.75      0.00      0.00      0.00      0.00      1.00
+DataAlloc                 :     364.35      0.00      0.00      0.22      0.00      0.00      0.00      0.00 262110.00
+DataRead (Device to Host) :    1105.38      0.02      0.00      2.07    502.84      0.01      0.00      1.59  69664.00
+DataWrite (Host to Device):    4299.05      0.01      0.00      3.86   2637.33      0.01      0.00      3.33 415975.00
+Kernel 0                  :       2.22      0.02      0.02      0.07   7478.72     74.79     74.47     75.25    100.00
+Kernel 1                  :       2.70      0.03      0.02      0.08   8006.00     80.06     79.77     80.42    100.00
+Kernel 2                  :       5.34      0.01      0.00      0.04      2.16      0.01      0.00      0.03    400.00
+Kernel 3                  :       2.07      0.01      0.00      0.02     11.53      0.03      0.03      0.06    400.00
+Kernel 4                  :       1.61      0.00      0.00      0.04      1.66      0.00      0.00      0.03    400.00
+Kernel 5                  :       1.49      0.00      0.00      0.03      6.09      0.02      0.01      0.04    400.00
+Kernel 6                  :       1.35      0.00      0.00      0.03      1.63      0.00      0.00      0.03    400.00
+Kernel 7                  :       1.82      0.00      0.00      0.02      8.17      0.02      0.02      0.05    400.00
+Kernel 8                  :       2.97      0.01      0.01      0.05    426.22      1.07      0.03      2.16    400.00
+Kernel 9                  :      20.94      0.00      0.00      0.12     98.24      0.01      0.01      0.04   7200.00
+Kernel 10                 :      17.70      0.00      0.00      0.02    112.65      0.02      0.01      0.02   7200.00
+Kernel 11                 :      19.68      0.00      0.00      0.02     21.36      0.00      0.00      0.01   7200.00
+Kernel 12                 :      16.92      0.00      0.00      0.02     14.07      0.00      0.00      0.01   7200.00
+Kernel 13                 :       2.58      0.01      0.01      0.09    281.77      1.41      1.26      1.58    200.00
+Kernel 14                 :       2.93      0.01      0.01      0.06    314.11      1.57      1.47      1.71    200.00
+Kernel 15                 :      28.85      0.02      0.01      0.08   1584.74      0.88      0.79      1.04   1800.00
+Kernel 16                 :       1.03      0.01      0.01      0.03     12.30      0.12      0.11      0.15    100.00
+Kernel 17                 :       1.73      0.02      0.01      0.08    122.88      1.23      1.08      1.43    100.00
+Kernel 18                 :       2.18      0.02      0.02      0.07    502.93      5.03      4.70      5.45    100.00
+Kernel 19                 :       2.42      0.02      0.02      0.11    466.22      4.66      4.35      5.09    100.00
+Kernel 20                 :       2.89      0.01      0.01      0.04     36.91      0.18      0.10      0.28    200.00
+Kernel 21                 :       1.18      0.01      0.01      0.05     37.15      0.37      0.37      0.40    100.00
+Kernel 22                 :       1.57      0.02      0.01      0.57     38.38      0.38      0.37      0.41    100.00
+Linking                   :       0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00      1.00
+OffloadEntriesInit        :       2.35      2.35      2.35      2.35      0.00      0.00      0.00      0.00      1.00
+======================================================================================================================
