@@ -1,0 +1,159 @@
+======================================================================================================================
+LIBOMPTARGET_PLUGIN_PROFILE(LEVEL_ZERO) for OMP DEVICE(0) Intel(R) Data Center GPU Max 1550, Thread 0
+----------------------------------------------------------------------------------------------------------------------
+Kernel 0                  : __omp_offloading_10302_6f89fb_cint__l4004
+Kernel 1                  : __omp_offloading_10302_6f89fb_cpush__l1031
+Kernel 2                  : __omp_offloading_10302_6f89fb_gem_pputil_mp_test_init_pmove__l108
+Kernel 3                  : __omp_offloading_10302_6f89fb_gem_pputil_mp_test_init_pmove__l136
+Kernel 4                  : __omp_offloading_10302_6f89fb_gem_pputil_mp_test_init_pmove__l151
+Kernel 5                  : __omp_offloading_10302_6f89fb_gem_pputil_mp_test_init_pmove__l165
+Kernel 6                  : __omp_offloading_10302_6f89fb_gem_pputil_mp_test_init_pmove__l189
+Kernel 7                  : __omp_offloading_10302_6f89fb_gem_pputil_mp_test_init_pmove__l208
+Kernel 8                  : __omp_offloading_10302_6f89fb_gem_pputil_mp_test_init_pmove__l267
+Kernel 9                  : __omp_offloading_10302_6f89fb_gem_pputil_mp_test_pmove__l397
+Kernel 10                 : __omp_offloading_10302_6f89fb_gem_pputil_mp_test_pmove__l422
+Kernel 11                 : __omp_offloading_10302_6f89fb_gem_pputil_mp_test_pmove__l481
+Kernel 12                 : __omp_offloading_10302_6f89fb_gem_pputil_mp_test_pmove__l518
+Kernel 13                 : __omp_offloading_10302_6f89fb_grid1__l1523
+Kernel 14                 : __omp_offloading_10302_6f89fb_grid1__l1677
+Kernel 15                 : __omp_offloading_10302_6f89fb_jpar0__l5913
+Kernel 16                 : __omp_offloading_10302_6f89fb_pbe__l11103
+Kernel 17                 : __omp_offloading_10302_6f89fb_pbi__l10999
+Kernel 18                 : __omp_offloading_10302_6f89fb_pint__l3545
+Kernel 19                 : __omp_offloading_10302_6f89fb_ppush__l657
+Kernel 20                 : __omp_offloading_10302_6f89fb_setw__l6367
+Kernel 21                 : __omp_offloading_10302_6f89fb_weatxeps__l10535
+Kernel 22                 : __omp_offloading_10302_6f89fb_wiatxeps__l10732
+----------------------------------------------------------------------------------------------------------------------
+                          : Host Time (msec)                        Device Time (msec)                      
+Name                      :      Total   Average       Min       Max     Total   Average       Min       Max     Count
+----------------------------------------------------------------------------------------------------------------------
+Compiling                 :   17531.37  17531.37  17531.37  17531.37      0.00      0.00      0.00      0.00      1.00
+DataAlloc                 :    1242.48      0.03      0.00      5.43      0.00      0.00      0.00      0.00  40170.00
+DataRead (Device to Host) :   36811.53      1.77      0.00     76.52     75.64      0.00      0.00      0.42  20796.00
+DataWrite (Host to Device):  127434.56      2.29      0.00    206.26    267.76      0.00      0.00      1.21  55529.00
+Kernel 0                  :       2.23      0.22      0.21      0.27    399.22     39.92     39.84     40.01     10.00
+Kernel 1                  :       1.98      0.20      0.19      0.25    443.26     44.33     44.22     44.43     10.00
+Kernel 2                  :       1.23      0.03      0.03      0.05      0.20      0.00      0.00      0.01     40.00
+Kernel 3                  :       1.27      0.03      0.03      0.06      1.17      0.03      0.03      0.03     40.00
+Kernel 4                  :       1.32      0.03      0.03      0.06      0.22      0.01      0.00      0.01     40.00
+Kernel 5                  :       1.18      0.03      0.03      0.05      0.71      0.02      0.02      0.02     40.00
+Kernel 6                  :       0.92      0.02      0.02      0.04      0.24      0.01      0.01      0.01     40.00
+Kernel 7                  :       1.21      0.03      0.03      0.06      0.86      0.02      0.02      0.02     40.00
+Kernel 8                  :       1.71      0.04      0.04      0.06     42.81      1.07      0.04      2.16     40.00
+Kernel 9                  :      22.31      0.03      0.03      0.07     13.54      0.02      0.02      0.02    720.00
+Kernel 10                 :      18.24      0.03      0.02      0.06     16.23      0.02      0.02      0.02    720.00
+Kernel 11                 :      22.02      0.03      0.03      0.07      4.95      0.01      0.01      0.01    720.00
+Kernel 12                 :      18.53      0.03      0.02      0.06      3.29      0.00      0.00      0.01    720.00
+Kernel 13                 :       2.16      0.11      0.10      0.17     23.91      1.20      1.16      1.22     20.00
+Kernel 14                 :       1.94      0.10      0.09      0.13     28.56      1.43      1.38      1.48     20.00
+Kernel 15                 :      20.52      0.11      0.11      0.19    141.61      0.79      0.76      0.83    180.00
+Kernel 16                 :       0.73      0.07      0.07      0.09      1.28      0.13      0.11      0.14     10.00
+Kernel 17                 :       0.94      0.09      0.08      0.14      9.60      0.96      0.94      0.98     10.00
+Kernel 18                 :       2.19      0.22      0.21      0.26     43.70      4.37      4.32      4.45     10.00
+Kernel 19                 :       1.96      0.20      0.18      0.27     40.69      4.07      4.02      4.15     10.00
+Kernel 20                 :       1.62      0.08      0.07      0.12      3.30      0.16      0.12      0.21     20.00
+Kernel 21                 :       0.74      0.07      0.07      0.12      3.74      0.37      0.37      0.40     10.00
+Kernel 22                 :       1.17      0.12      0.06      0.60      3.86      0.39      0.38      0.40     10.00
+Linking                   :       0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00      1.00
+OffloadEntriesInit        :      68.86     68.86     68.86     68.86      0.00      0.00      0.00      0.00      1.00
+======================================================================================================================
+
+=== API Timing Results: ===
+
+Total Execution Time (ns):         512566999059
+      Total API Time (ns):          22033089105
+
+                              Function,       Calls,           Time (ns),  Time (%),        Average (ns),            Min (ns),            Max (ns)
+                        zeModuleCreate,           9,         17820961880,     80.88,          1980106875,               58508,         17531359943
+                zeEventHostSynchronize,      137145,          1767434134,      8.02,               12887,                1319,             2158755
+         zeCommandListAppendMemoryCopy,      197826,          1567097838,      7.11,                7921,                2024,             2217823
+       zeCommandListAppendLaunchKernel,      152329,           417888682,      1.90,                2743,                2012,             1699478
+            zeCommandListAppendBarrier,       32052,            86810710,      0.39,                2708,                2239,               30985
+           zeEventQueryKernelTimestamp,       78285,            75656012,      0.34,                 966,                 662,               37929
+              zeKernelSetArgumentValue,      325930,            67780388,      0.31,                 207,                  32,               36307
+                  zeKernelSetGroupSize,      149919,            49158803,      0.22,                 327,                 130,               26884
+               zeMemGetAllocProperties,      428379,            48416643,      0.22,                 113,                  39,                9128
+                      zeEventHostReset,      382199,            44341536,      0.20,                 116,                  46,               36711
+                      zeMemAllocDevice,         526,            25208984,      0.11,               47925,                9270,              143264
+                             zeMemFree,         451,            20983377,      0.10,               46526,                3845,               93757
+                    zeEventQueryStatus,       15364,            17097368,      0.08,                1112,                 884,               27973
+              zeKernelSuggestGroupSize,       80784,            13818161,      0.06,                 171,                  57,               21654
+           zeContextMakeMemoryResident,         526,             8120052,      0.04,               15437,                6389,              328058
+          zeCommandListCreateImmediate,           4,             1161043,      0.01,              290260,               30061,             1040925
+                  zeCommandQueueCreate,           1,              230769,      0.00,              230769,              230769,              230769
+                        zeMemAllocHost,           8,              192583,      0.00,               24072,               12387,               39784
+                        zeKernelCreate,          37,              139784,      0.00,                3777,                 994,                7956
+                         zeEventCreate,         300,              128374,      0.00,                 427,                 140,                7623
+           zeDeviceGetMemoryProperties,           1,              118478,      0.00,              118478,              118478,              118478
+                      zeMemAllocShared,           3,              113649,      0.00,               37883,               24450,               44906
+                     zeEventPoolCreate,           5,               95210,      0.00,               19042,                8742,               38066
+              zeModuleGetGlobalPointer,          55,               29195,      0.00,                 530,                 171,                1250
+                    zeEventPoolDestroy,           1,               22430,      0.00,               22430,               22430,               22430
+                 zeDeviceGetProperties,          11,               14883,      0.00,                1353,                 206,                4575
+                        zeEventDestroy,         100,               14609,      0.00,                 146,                  45,                 871
+                 zeKernelGetProperties,          33,               14319,      0.00,                 433,                 104,                 968
+        zeDriverGetExtensionProperties,           4,                6068,      0.00,                1517,                 209,                3541
+             zeKernelSetIndirectAccess,          33,                5731,      0.00,                 173,                  78,                 328
+zeDeviceGetCommandQueueGroupProperties,          12,                4125,      0.00,                 343,                  30,                 872
+                 zeDeviceGetSubDevices,          16,                3140,      0.00,                 196,                  35,                 660
+                       zeKernelDestroy,           1,                3072,      0.00,                3072,                3072,                3072
+                           zeDeviceGet,           8,                2853,      0.00,                 356,                  65,                1036
+                zeModuleGetKernelNames,           3,                1903,      0.00,                 634,                 256,                1367
+                       zeContextCreate,           2,                1881,      0.00,                 940,                 712,                1169
+                           zeDriverGet,           6,                1795,      0.00,                 299,                  66,                 733
+                      zeContextDestroy,           1,                1679,      0.00,                1679,                1679,                1679
+           zeDeviceGetModuleProperties,           1,                1517,      0.00,                1517,                1517,                1517
+                 zeModuleGetProperties,           6,                1065,      0.00,                 177,                 103,                 203
+                       zeKernelGetName,          10,                1032,      0.00,                 103,                  47,                 170
+                 zeDriverGetProperties,           1,                 784,      0.00,                 784,                 784,                 784
+     zeDeviceGetMemoryAccessProperties,           1,                 780,      0.00,                 780,                 780,                 780
+                 zeDriverGetApiVersion,           3,                 556,      0.00,                 185,                 159,                 222
+          zeDeviceGetComputeProperties,           2,                 477,      0.00,                 238,                 216,                 261
+               zeModuleBuildLogDestroy,           1,                 418,      0.00,                 418,                 418,                 418
+            zeDeviceGetImageProperties,           1,                 173,      0.00,                 173,                 173,                 173
+            zeDeviceGetCacheProperties,           1,                 162,      0.00,                 162,                 162,                 162
+
+=== Device Timing Results: ===
+
+Total Execution Time (ns):         512566999059
+   Total Device Time (ns):           2679902640
+
+                                                                                                                                                                                          Kernel,       Calls,           Time (ns),    Time (%),        Average (ns),            Min (ns),            Max (ns)
+                                                                                                                                                      __omp_offloading_10302_6f89fb_cpush__l1031,          10,           443261280,       16.54,            44326128,            44222240,            44433600
+                                                                                                                                                       __omp_offloading_10302_6f89fb_cint__l4004,          10,           399223520,       14.90,            39922352,            39842880,            40013920
+                                                                                                                                                              zeCommandListAppendMemoryCopy(M2D),        4042,           261555040,        9.76,               64709,                  80,             1210320
+                                                                                                                                                              zeCommandListAppendMemoryCopy(H2D),      127573,           256485120,        9.57,                2010,                  80,               37040
+                                                                                                                                                                      ztrsm_nocopy_lu_nn_8x8_4x1,        1319,           198247200,        7.40,              150301,              139520,              159200
+                                                                                                                                                              zeCommandListAppendMemoryCopy(D2H),       62644,           180747680,        6.74,                2885,                 480,               22400
+                                                                                                                                                                      ztrsm_nocopy_ll_nn_8x8_4x1,        1319,           148986880,        5.56,              112954,              103520,              141280
+                                                                                                                                                      __omp_offloading_10302_6f89fb_jpar0__l5913,         180,           141614240,        5.28,              786745,              755360,              832000
+                        _ZTSZZN6oneapi3mkl6lapack8internal3usmL13ilp64_to_lp64IlEEN4sycl3_V15eventERNS6_5queueEPKlPiT_RKSt6vectorIS7_SaIS7_EEENKUlRNS6_7handlerEE_clESK_EUlNS6_7nd_itemILi1EEEE_,       47423,           138526080,        5.17,                2921,                2240,                6080
+                                                             _ZTSZZN6oneapi3mkl6lapack8internal3usmL8coalesceERN4sycl3_V15queueERKSt6vectorINS5_5eventESaIS9_EEENKUlRNS5_7handlerEE_clESF_EUlvE_,       79463,            99836640,        3.73,                1256,                 960,                4160
+                                                                                                                                                                      zeCommandListAppendBarrier,       32052,            52122400,        1.94,                1626,                1440,                2880
+                                                                                                                                                       __omp_offloading_10302_6f89fb_pint__l3545,          10,            43697920,        1.63,             4369792,             4318080,             4448960
+                                                                                                                               __omp_offloading_10302_6f89fb_gem_pputil_mp_test_init_pmove__l267,          40,            42813280,        1.60,             1070332,               35840,             2155520
+_ZTSZZN6oneapi3mkl6lapack8internal3usm3opt5laswpISt7complexIdEldEEN4sycl3_V15eventERNS9_5queueET0_PT_SD_SD_SD_PKSD_SD_RKSt6vectorISA_SaISA_EEENKUlRNS9_7handlerEE_clESO_EUlNS9_7nd_itemILi1EEEE_,        1319,            40826240,        1.52,               30952,               24000,               37120
+                                                                                                                                                       __omp_offloading_10302_6f89fb_ppush__l657,          10,            40690400,        1.52,             4069040,             4015360,             4147840
+                        _ZTSZZN6oneapi3mkl6lapack8internal3usmL13lp64_to_ilp64IlEEN4sycl3_V15eventERNS6_5queueEPKiPlT_RKSt6vectorIS7_SaIS7_EEENKUlRNS6_7handlerEE_clESK_EUlNS6_7nd_itemILi1EEEE_,       16679,            36932800,        1.38,                2214,                1920,                5760
+                                                                                                                                                              zeCommandListAppendMemoryCopy(D2M),        3567,            36389040,        1.36,               10201,                1520,              424720
+                                                                                                                                                      __omp_offloading_10302_6f89fb_grid1__l1677,          20,            28563840,        1.07,             1428192,             1379520,             1483360
+                                                                                                                                                      __omp_offloading_10302_6f89fb_grid1__l1523,          20,            23913920,        0.89,             1195696,             1159840,             1220640
+                                                                                                                                    __omp_offloading_10302_6f89fb_gem_pputil_mp_test_pmove__l422,         720,            16229600,        0.61,               22541,               18720,               24960
+                                                                                                                                    __omp_offloading_10302_6f89fb_gem_pputil_mp_test_pmove__l397,         720,            13540320,        0.51,               18806,               15200,               22720
+                                                                                                                                                       __omp_offloading_10302_6f89fb_pbi__l10999,          10,             9599040,        0.36,              959904,              944320,              984320
+                                                                                                                                    __omp_offloading_10302_6f89fb_gem_pputil_mp_test_pmove__l481,         720,             4951200,        0.18,                6876,                5920,                7680
+                                                                                                                                                  __omp_offloading_10302_6f89fb_wiatxeps__l10732,          10,             3860640,        0.14,              386064,              380000,              397440
+                                                                                                                                                  __omp_offloading_10302_6f89fb_weatxeps__l10535,          10,             3743360,        0.14,              374336,              368160,              398720
+                                                                                                                                                       __omp_offloading_10302_6f89fb_setw__l6367,          20,             3297440,        0.12,              164872,              115360,              209120
+                                                                                                                                    __omp_offloading_10302_6f89fb_gem_pputil_mp_test_pmove__l518,         720,             3294720,        0.12,                4576,                4000,                6240
+                                                      _ZTSZZN6oneapi3mkl6lapack8internal3usmL3setIlEEN4sycl3_V15eventERNS6_5queueET_PSA_RKSt6vectorIS7_SaIS7_EEENKUlRNS6_7handlerEE_clESI_EUlvE_,        1319,             2259840,        0.08,                1713,                 960,                4160
+                                                                                                                                                       __omp_offloading_10302_6f89fb_pbe__l11103,          10,             1280640,        0.05,              128064,              113920,              144800
+                                                                                                                               __omp_offloading_10302_6f89fb_gem_pputil_mp_test_init_pmove__l136,          40,             1172160,        0.04,               29304,               28320,               30560
+                                                                                                                               __omp_offloading_10302_6f89fb_gem_pputil_mp_test_init_pmove__l208,          40,              864480,        0.03,               21612,               20000,               22720
+                                                                                                                               __omp_offloading_10302_6f89fb_gem_pputil_mp_test_init_pmove__l165,          40,              714400,        0.03,               17860,               17440,               18080
+                                                                                                                               __omp_offloading_10302_6f89fb_gem_pputil_mp_test_init_pmove__l189,          40,              240640,        0.01,                6016,                5760,                6400
+                                                                                                                               __omp_offloading_10302_6f89fb_gem_pputil_mp_test_init_pmove__l151,          40,              217280,        0.01,                5432,                4480,                6080
+                                                                                                                               __omp_offloading_10302_6f89fb_gem_pputil_mp_test_init_pmove__l108,          40,              199200,        0.01,                4980,                4320,                5440
+                                                                                                                                                                                     binary_test,           1,                4160,        0.00,                4160,                4160,                4160
+
