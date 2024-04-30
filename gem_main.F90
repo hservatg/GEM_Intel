@@ -654,9 +654,8 @@ subroutine ppush(n,ns)
 
     start_ppush_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams map(tofrom:mynopi)
     !$acc loop gang vector private(rhox,rhoy)
-!$omp distribute parallel do private(rhox,rhoy)
+!$omp target teams loop private(rhox,rhoy) reduction(+:mynopi)
     do m=1,mm(ns)
         r=x2(m,ns)-0.5*lx+lr0
         k = int(z2(m,ns)/delz)
@@ -871,7 +870,6 @@ subroutine ppush(n,ns)
         if(itube==1)go to 333
         if(abs(pzp-pzi(m,ns))>pzcrit(ns).or.abs(vfac-eki(m,ns))>0.5*eki(m,ns))then
        !$acc atomic
-!$omp atomic
             mynopi = mynopi+1
             x3(m,ns) = xii(m,ns)
             z3(m,ns) = z0i(m,ns)
@@ -931,7 +929,6 @@ subroutine ppush(n,ns)
 
     enddo
     !$acc end parallel
-!$omp end target teams
 end_ppush_tm = MPI_WTIME()
 tot_ppush_tm = tot_ppush_tm + end_ppush_tm - start_ppush_tm
     call MPI_ALLREDUCE(mynopi,nopi(ns),1,MPI_integer, &
@@ -1028,9 +1025,9 @@ subroutine cpush(n,ns)
 
 start_cpush_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams map(tofrom:myke,mynos,myavewi,myefl_es,mypfl_es,myefl_em,mypfl_em)
     !$acc loop gang vector private(rhox,rhoy,aparp)
-!$omp distribute parallel do private(rhox,rhoy,aparp)
+!$omp target teams loop reduction(+:mynowi,myke,myavewi,mynos) private(rhox,rhoy,aparp) &
+!$omp   map(tofrom:myefl_es,mypfl_es,myefl_em,mypfl_em)
     do m=1,mm(ns)
         r=x3(m,ns)-0.5*lx+lr0
 
@@ -1240,7 +1237,6 @@ start_cpush_tm = MPI_WTIME()
             - dt*gamgyro*avwixezp
         if(abs(w3(m,ns)).gt.2.0.and.nonlin(ns)==1)then
        !$acc atomic
-!$omp atomic
             mynowi = mynowi+1
             w3(m,ns) = 0.
             w2(m,ns) = 0.
@@ -1306,20 +1302,14 @@ start_cpush_tm = MPI_WTIME()
         !$acc end atomic
 !$omp end atomic
         !$acc atomic update
-!$omp atomic update
         myke=myke + vfac*w3(m,ns)
         !$acc end atomic
-!$omp end atomic
         !$acc atomic update
-!$omp atomic update
         mynos=mynos + w3(m,ns)
         !$acc end atomic
-!$omp end atomic
         !$acc atomic update
-!$omp atomic update
         myavewi = myavewi+abs(w3(m,ns))
         !$acc end atomic
-!$omp end atomic
         !     xn+1 becomes xn...
         u2(m,ns)=u3(m,ns)
         x2(m,ns)=x3(m,ns)
@@ -1330,7 +1320,6 @@ start_cpush_tm = MPI_WTIME()
         !     100     continue
     enddo
     !$acc end parallel
-!$omp end target teams
 end_cpush_tm = MPI_WTIME()
 tot_cpush_tm = tot_cpush_tm + end_cpush_tm - start_cpush_tm
 
@@ -3562,9 +3551,8 @@ subroutine pint
 
 start_pint_tm = MPI_WTIME()
     !$acc parallel 
-!$omp target teams map(tofrom:myopz,myoen,myavptch,myaven)
     !$acc loop gang vector
-!$omp distribute parallel do
+!$omp target teams loop reduction(+:myopz,myoen,myavptch,myaven)
     do m=1,mme
         r=x2e(m)-0.5*lx+lr0
 
@@ -3823,7 +3811,6 @@ start_pint_tm = MPI_WTIME()
         ipover = 0
         if(abs(pzp-pze(m))>pzcrite)then
        !$acc atomic
-!$omp atomic
             myopz = myopz+1
             ipover = 1
         end if
@@ -3832,14 +3819,11 @@ start_pint_tm = MPI_WTIME()
         !In that case, encrit should be large
         if(abs(vfac-eke(m))>0.5*eke(m).and.abs(x2e(m)-lx/2)<(lx/2-1))then
    !$acc atomic
-!$omp atomic
             myoen = myoen+1
             ieover = 1
    !$acc atomic
-!$omp atomic
             myaven = myaven+eke(m)
    !$acc atomic
-!$omp atomic
             myavptch = myavptch+abs(vpar)/sqrt(2/emass*vfac)
         end if
         if(itube==1)goto 333
@@ -3903,7 +3887,6 @@ start_pint_tm = MPI_WTIME()
 
     end do
     !$acc end parallel
-!$omp end target teams
 end_pint_tm = MPI_WTIME()
 tot_pint_tm = tot_pint_tm + end_pint_tm - start_pint_tm
     call MPI_ALLREDUCE(myopz,nopz,1,MPI_integer, &
@@ -4020,10 +4003,14 @@ subroutine cint(n)
     mynowe = 0
     mynovpar = 0
 start_cint_tm = MPI_WTIME()
+
+#warning "mynopar should be reduced?"
+#warning "myptrp should be reduced? missing atomic?"
+
     !$acc parallel 
-!$omp target teams map(tofrom:mynowe,mynovpar,myke,mytotn,mytrap,myptrp,myavewe,myefl_es,mypfl_es,myefl_em,mypfl_em)
     !$acc loop gang vector
-!$omp distribute parallel do
+!$omp target teams loop reduction(+:mynovpar,myke,mynos,myavewe,mynowe,mytotn,mytrap,myptrp) &
+!$omp   map(tofrom:myavewe,myefl_es,mypfl_es,myefl_em,mypfl_em)
     do m=1,mme
         r=x3e(m)-0.5*lx+lr0
 
@@ -4282,7 +4269,6 @@ start_cint_tm = MPI_WTIME()
             w3e(m) = 0.
             w2e(m) = 0.
 !$acc atomic
-!$omp atomic
             mynowe = mynowe+1
         end if
         if(x3e(m)<lx/20.0 .or. x3e(m)>(lx-lx/20.))then
@@ -4305,11 +4291,9 @@ start_cint_tm = MPI_WTIME()
         end if
 
 !$acc atomic
-!$omp atomic
         mytotn = mytotn+1
         if(isunie.eq.1)mytotn = mytotn+exp(-vfac)
 !$acc atomic
-!$omp atomic
         mytrap = mytrap+(1-ipass(m))
         if(isunie.eq.1)mytrap = mytrap+exp(-vfac)*(1-ipass(m))
 
@@ -4370,20 +4354,14 @@ start_cint_tm = MPI_WTIME()
         !$acc end atomic
 !$omp end atomic
         !$acc atomic update
-!$omp atomic update
         myke=myke + vfac*w3e(m)
         !$acc end atomic
-!$omp end atomic
         !$acc atomic update
-!$omp atomic update
         mynos=mynos + w3e(m)
         !$acc end atomic
-!$omp end atomic
         !$acc atomic update
-!$omp atomic update
         myavewe = myavewe+abs(w3e(m))
         !$acc end atomic
-!$omp end atomic
         if(abs(z3e(m)-z2e(m)).gt.lz/2)ipass(m)=1
 
         ! Turning off trapped electrons...
@@ -4399,7 +4377,6 @@ start_cint_tm = MPI_WTIME()
 
     enddo
     !$acc end parallel
-!$omp end target teams
 end_cint_tm = MPI_WTIME()
 tot_cint_tm = tot_cint_tm + end_cint_tm - start_cint_tm
     call MPI_ALLREDUCE(mynowe,nowe,1,MPI_integer, &
