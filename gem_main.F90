@@ -3552,7 +3552,14 @@ subroutine pint
 start_pint_tm = MPI_WTIME()
     !$acc parallel 
     !$acc loop gang vector
-!$omp target teams loop reduction(+:myopz,myoen,myavptch,myaven)
+!$omp target teams loop reduction(+:myopz,myoen,myavptch,myaven) &
+!$omp   private(phip,wx0,wx1,wy0,wy1,wz0,wz1,x000,x001,x010,x011,x100,x101,x110,x111) &
+!$omp   private(r,th,i,k,exp1,eyp,ezp,delbxp,delbyp,dgdtp,dpdzp,dadzp,aparp) &
+!$omp   private(delbxhp,delbyhp,dahdzp,aparhp) &
+!$omp   private(dbdrp,dbdtp,grcgtp,bfldp,radiusp,dydrp,qhatp,grp,gxdgyp,curvbzp,bdcrvbp,grdgtp) &
+!$omp   private(fp,jfnp,psipp,psp,ter,kaptp,kapnp,xnp,vncp,psip2p,dipdrp,nue0p,zeffp,b,pzp,xt,yt) &
+!$omp   private(edot,vpdum,pzdot,pzd1,pzd0,zdot,zdot0,zdot1,ydot,ydtes,ydtem,vfac,vp0,kap) &
+!$omp   private(ppar,vpar,bstar,enerb,dum2,vxdum,xdt0,xdtes,xdtem,xdot,ydt0)
     do m=1,mme
         r=x2e(m)-0.5*lx+lr0
 
@@ -4010,7 +4017,19 @@ start_cint_tm = MPI_WTIME()
     !$acc parallel 
     !$acc loop gang vector
 !$omp target teams loop reduction(+:mynovpar,myke,mynos,myavewe,mynowe,mytotn,mytrap,myptrp) &
-!$omp   map(tofrom:myavewe,myefl_es,mypfl_es,myefl_em,mypfl_em)
+!$omp   map(tofrom:myavewe,myefl_es,mypfl_es,myefl_em,mypfl_em) &
+!$omp   private(phip,exp1,eyp,ezp,delbxp,delbyp,dpdzp,dadzp,aparp) &
+!$omp   private(dum,vxdum,dum1,dum2,eps,x,h_x,h_coll,hee,nue) &
+!$omp   private(m,i,j,k,l,n) &
+!$omp   private(vfac,kap,kapnp,kaptp,vpar,ppar,vpdum,xnp) &
+!$omp   private(b,th,enerb,qr,laps,ter,dtp) &
+!$omp   private(xt,yt,xdot,ydot,zdot,pzdot,edot,pzd0,pzd1,vp0,xdt0,ydt0,xdtes,ydtes,xdtem,ydtem) &
+!$omp   private(wx0,wx1,wy0,wy1,wz0,wz1,w3old) &
+!$omp   private(dbdrp,dbdtp,grcgtp,bfldp,fp,radiusp,dydrp,qhatp,psipp,jfnp,grdgtp,nue0p,zeffp) &
+!$omp   private(grp,gxdgyp,psp,pzp,psip2p,bdcrvbp,curvbzp,dipdrp,bstar) &
+!$omp   private(x000,x001,x010,x011,x100,x101,x110,x111) &
+!$omp   private(fdum,gdum,fesrcp,dnesrcp,avwexepsp,fovg,avwexezp,dnesrczp) &
+!$omp   private(dapsdtp,dahdzp,aparhp,zdot0,zdot1)
     do m=1,mme
         r=x3e(m)-0.5*lx+lr0
 
