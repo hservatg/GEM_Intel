@@ -9747,7 +9747,7 @@ subroutine gkps_init
         end do
         !$omp end target data
 
-!$omp target update from(mxg)
+!$omp target update from(mxg,ipivg)
 
         call MPI_COMM_RANK(MPI_COMM_WORLD, i, j)
         print*, 'mpi rank=', i, 'INFO=', INFO, 'myid=', myid
@@ -10084,7 +10084,7 @@ subroutine dpdt_init
         end do
         !$omp end target data
 
-!$omp target update from(mxd)
+!$omp target update from(mxd,ipivd)
 
         open(30000+MyId,file=fname,form='unformatted',status='unknown')
         do i = 1,imx-1
