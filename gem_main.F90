@@ -7,15 +7,26 @@ program gem_main
     use gem_fft_wrapper
     implicit none
     integer :: n,i,j,k,ip,ns
+    real :: others,tmp
+    character(len=70) fname
+    character(len=5) holdmyid
 
     call initialize
+    write(holdmyid,'(I5.5)') MyId
+    fname=outdir//'gem_timing_'//holdmyid//'.txt'
+    open(510+MyId,file=fname,status="replace",action="write")
+    end_tm = MPI_WTIME()
+    write(510+MyId,*)'initilization', end_tm - start_tm
     ! use the following two lines for r-theta contour plot
     if(iCrs_Sec==1)then
         call pol2d
         !     call balloon
         goto 100
     end if
+    start_tm = MPI_WTIME()
     if(iget.eq.0)call loader_wrapper
+    end_tm = MPI_WTIME()
+    write(510+MyId,*)'load', end_tm - start_tm
     if(iget.eq.1)then
         call restart(1,0)
     end if
@@ -70,27 +81,67 @@ program gem_main
     !if(ifluid==1)call weatxeps(1)
     lasttm=MPI_WTIME()
     tottm=lasttm-starttm
-    call MPI_Allreduce(MPI_IN_PLACE, tottm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_ppush_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_cpush_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_pint_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_cint_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_grid_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_jie_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_den0_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_setw_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_weatxeps_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_wiatxeps_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_pbi_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_pbe_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_jpar0_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_init_pmove_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_pmove_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_poisson_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    call MPI_Allreduce(MPI_IN_PLACE, tot_ampere_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr) 
-    call MPI_ALLreduce(MPI_IN_PLACE, tot_init_lap_tm, 1, MPI_REAL, MPI_SUM, MPI_COMM_WORLD, ierr)
-    if(myid==0) write(*,*)'tot time=',tottm - tot_init_lap_tm, 'ppush time', tot_ppush_tm, 'cpush time', tot_cpush_tm, 'pint time', tot_pint_tm, 'cint time', tot_cint_tm, 'grid time', tot_grid_tm, 'jie time', tot_jie_tm, 'den0 time', tot_den0_tm, 'setw time', tot_setw_tm, 'weatxeps time', tot_weatxeps_tm, 'wiatxeps time', tot_wiatxeps_tm, 'pbi time', tot_pbi_tm, 'pbe time', tot_pbe_tm, 'jpar0 time', tot_jpar0_tm
-    if(myid==0) write(*,*)'init pmove', tot_init_pmove_tm, 'pmove', tot_pmove_tm, 'poisson', tot_poisson_tm, 'ampere', tot_ampere_tm - tot_init_lap_tm, 'init_lap', tot_init_lap_tm
+     tottm = tottm - tot_init_lap_tm - tot_init_fltm_tm
+     tot_ampere_tm = tot_ampere_tm - tot_init_lap_tm - tot_init_fltm_tm
+     others = tottm-tot_grid_tm-tot_ppush_tm-tot_cpush_tm-tot_pint_tm-tot_cint_tm-tot_setw_tm-tot_weatxeps_tm-tot_wiatxeps_tm-tot_pbi_tm-tot_pbe_tm-tot_jpar0_tm-tot_init_pmove_tm-tot_pmove_tm-tot_poisson_tm-tot_ampere_tm
+     write(holdmyid,'(I5.5)') MyId
+     fname='gem_timing_'//holdmyid//'.txt'
+     open(510+MyId,file=fname,status="replace",action="write")
+     write(510+MyId,*)'myid=',myid, 'mm(ns)', mm(1), 'mme', mme
+     write(510+MyId,*)'tot time=',tottm, 'ppush time', tot_ppush_tm, 'cpush time', tot_cpush_tm, 'pint time', tot_pint_tm, 'cint time', tot_cint_tm, 'grid time', tot_grid_tm, 'jie time', tot_jie_tm, 'den0 time', tot_den0_tm, 'setw time', tot_setw_tm, 'weatxeps time', tot_weatxeps_tm, 'wiatxeps time', tot_wiatxeps_tm, 'pbi time', tot_pbi_tm, 'pbe time', tot_pbe_tm, 'jpar0 time', tot_jpar0_tm
+     write(510+MyId,*)'init pmove', tot_init_pmove_tm, 'pmove', tot_pmove_tm, 'poisson', tot_poisson_tm, 'ampere', tot_ampere_tm, 'init_lap', tot_init_lap_tm, 'init_fltm', tot_init_fltm_tm, 'other', others
+     write(510+MyId,*)'field solver percentage is', (tot_ampere_tm+tot_poisson_tm)/tottm, 'others precentage is', others/tottm, 'field solver + others', (tot_ampere_tm+tot_poisson_tm+others)/tottm
+     call flush(510+MyId)
+     close(510+MyId)
+     call mpi_barrier(mpi_comm_world,ierr)
+    call MPI_reduce(tottm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tottm = tmp/real(numprocs)
+    call MPI_reduce(tot_ppush_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_ppush_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_cpush_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_cpush_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_pint_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_pint_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_cint_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_cint_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_grid_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_grid_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_jie_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_jie_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_den0_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_den0_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_setw_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_setw_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_weatxeps_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_weatxeps_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_wiatxeps_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_wiatxeps_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_pbi_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_pbi_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_pbe_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_pbe_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_jpar0_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_jpar0_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_init_pmove_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_init_pmove_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_pmove_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_pmove_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_poisson_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_poisson_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_ampere_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_ampere_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_init_lap_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_init_lap_tm = tmp/real(numprocs)
+    call MPI_reduce(tot_init_fltm_tm, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)tot_init_fltm_tm = tmp/real(numprocs)
+    call MPI_reduce(others, tmp, 1, MPI_REAL8, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
+    if(myid==0)others = tmp/real(numprocs)
+    if(myid==0)open(123, file = "gem_timing.txt", status = "replace", action="write")
+    if(myid==0) write(123,*)'tot time=',tottm, 'ppush time', tot_ppush_tm, 'cpush time', tot_cpush_tm, 'pint time', tot_pint_tm, 'cint time', tot_cint_tm, 'grid time', tot_grid_tm, 'jie time', tot_jie_tm, 'den0 time', tot_den0_tm, 'setw time', tot_setw_tm, 'weatxeps time', tot_weatxeps_tm, 'wiatxeps time', tot_wiatxeps_tm, 'pbi time', tot_pbi_tm, 'pbe time', tot_pbe_tm, 'jpar0 time', tot_jpar0_tm
+    if(myid==0) write(123,*)'init pmove', tot_init_pmove_tm, 'pmove', tot_pmove_tm, 'poisson', tot_poisson_tm, 'ampere', tot_ampere_tm, 'init_lap', tot_init_lap_tm, 'init_fltm', tot_init_fltm_tm, 'other', others
+    if(myid==0)write(123,*)'field solver percentage is', (tot_ampere_tm+tot_poisson_tm)/tottm, 'others precentage is', others/tottm, 'field solver + others', (tot_ampere_tm+tot_poisson_tm+others)/tottm
+    if(myid==0)call flush(123)
+    if(myid==0)close(123)
     call MPI_BARRIER(MPI_COMM_WORLD,ierr)
 
     100 call MPI_FINALIZE(ierr)
@@ -175,6 +226,7 @@ subroutine init
     pi2 = pi*2.
 
     call ppinit_mpi(myid,numprocs)
+    start_tm=MPI_WTIME()
     last=numprocs-1
     !the initial timestep index
     timestep=0
@@ -11540,7 +11592,7 @@ subroutine laplace(u)
                     deltam = 5
                     numpol = 2*deltam+1
                     dzeta = pi2/lymult/jmx
-
+                    start_init_fltm_tm = MPI_WTIME()
                     if(ifirst .ne. -99)then
                         allocate(dthf(1:imx-1),mpolpf(1:imx-1,0:numpol-1),efac1(1:imx-1,0:jmx-1,0:1),efac2(1:imx-1,0:1,0:numpol-1))
                         do i = 1,imx-1
@@ -11569,7 +11621,8 @@ subroutine laplace(u)
                         end do
                         ifirst = -99
                     end if
-
+                    end_init_fltm_tm = MPI_WTIME()
+                    tot_init_fltm_tm = tot_init_fltm_tm + end_init_fltm_tm - start_init_fltm_tm
                     umn = 0.
 #if defined(OPENACC2OPENMP_ORIGINAL_OPENMP)
                     !$omp parallel do collapse(2) shared(imx,numpol,lymult,umn,efac2,dthf,jmx,efac1,dzeta,u) private(cdum,cdum1,udum)
