@@ -1,0 +1,101 @@
+nohup: ignoring input
+[0] MPI startup(): Intel(R) MPI Library, Version 2021.12  Build 20240213 (id: 4f55822)
+[0] MPI startup(): Copyright (C) 2003-2024 Intel Corporation.  All rights reserved.
+[0] MPI startup(): library kind: release
+[0] MPI startup(): shm segment size (417 MB per rank) * (8 local ranks) = 3338 MB total
+[0] MPI startup(): max number of MPI_Request per vci: 67108864 (pools: 1)
+[0] MPI startup(): Load tuning file: "/opt/intel/oneapi/mpi/2021.12/opt/mpi/etc/tuning_skx_shm.dat"
+[0] MPI startup(): threading: mode: direct
+[0] MPI startup(): threading: vcis: 1
+[0] MPI startup(): threading: app_threads: -1
+[0] MPI startup(): threading: runtime: generic
+[0] MPI startup(): threading: progress_threads: 0
+[0] MPI startup(): threading: async_progress: 0
+[0] MPI startup(): threading: lock_level: global
+[0] MPI startup(): tag bits available: 30 (TAG_UB value: 1073741823) 
+[0] MPI startup(): source bits available: 0 (Maximal number of rank: 0) 
+[0] MPI startup(): ===== CPU pinning =====
+[0] MPI startup(): Rank    Pid      Node name    Pin cpu
+[0] MPI startup(): 0       3454360  ortce-skl22  {0,1,2,3,4,40,41,42,43,44}
+[0] MPI startup(): 1       3454361  ortce-skl22  {5,6,7,8,9,45,46,47,48,49}
+[0] MPI startup(): 2       3454362  ortce-skl22  {10,11,12,13,14,50,51,52,53,54}
+[0] MPI startup(): 3       3454363  ortce-skl22  {15,16,17,18,19,55,56,57,58,59}
+[0] MPI startup(): 4       3454364  ortce-skl22  {20,21,22,23,24,60,61,62,63,64}
+[0] MPI startup(): 5       3454365  ortce-skl22  {25,26,27,28,29,65,66,67,68,69}
+[0] MPI startup(): 6       3454366  ortce-skl22  {30,31,32,33,34,70,71,72,73,74}
+[0] MPI startup(): 7       3454367  ortce-skl22  {35,36,37,38,39,75,76,77,78,79}
+[0] MPI startup(): I_MPI_ROOT=/opt/intel/oneapi/mpi/2021.12
+[0] MPI startup(): ONEAPI_ROOT=/opt/intel/oneapi
+[0] MPI startup(): I_MPI_MPIRUN=mpirun
+[0] MPI startup(): I_MPI_BIND_WIN_ALLOCATE=localalloc
+[0] MPI startup(): I_MPI_HYDRA_TOPOLIB=hwloc
+[0] MPI startup(): I_MPI_RETURN_WIN_MEM_NUMA=0
+[0] MPI startup(): I_MPI_INTERNAL_MEM_POLICY=default
+[0] MPI startup(): I_MPI_FABRICS=shm
+[0] MPI startup(): I_MPI_DEBUG=10
+  3.637978807091713E-012 -1.496682253826487E-009 -1.151391077643370E-002
+ dt,beta=   0.100000000000000       6.152414092535767E-003
+ amp,vpp,yd0 =   1.000000000000000E-023  0.000000000000000E+000
+  0.000000000000000E+000
+ peritr,ifluid=                      0                     1
+ tor,nonlin=    1.00000000000000                          0
+                     0
+ isuni=                      0 amie=    1838.23529411765     
+ kxcut,kycut,bcut=    1.50000000000000       0.211207292817267     
+   3000.00000000000     
+ fradi,isg=   0.000000000000000E+000  0.000000000000000E+000
+ llk,mlk,onemd =                     0                     1
+                     1
+ vcut=    15.0000000000000     
+ rneu=   0.000000000000000E+000
+ V-ExB switch=   0.000000000000000E+000
+ V-parallel switch=   0.000000000000000E+000
+ mm1=              125829120
+ pzcrite,encrit =    19.6688882659230       0.163602268600000     
+ nue0 =    1.00000000000000        1.00000000000000        1.00000000000000     
+ xn0e(1) =    1.08401192438814     
+ frequ =    200275000.000000     
+ lxa,lymult,delra,r0a,rina,routa=  0.800000000000000     
+   16.0000000000000       5.000000000000000E-002  0.500000000000000     
+  0.100000000000000       0.900000000000000     
+ a,r0,rmaj0,q0,lx,ly,lz=   232.275726096468        116.137863048234     
+   678.962183526970       -1.39370248000000        185.820580877175     
+   32.7237935097121        5945.59779686755     
+ t0,kyrhoi_local=  0.818011343000000       0.245590116753767     
+ coefu =    1292.64832535885     
+ ktheta*rhos =   0.245590116753767     
+ cs/a, q0, q0p, s^hat =   2.753346305502455E-003  -1.39370248000000     
+ -9.613757483520132E-003  0.801118794019794     
+ rho* = rhos/a =   5.506692611004910E-003
+ psip(nr/2),Bunit =   -84.6923246056227        1.01634298877016     
+ lxa min =   2.798871942652242E-002
+ t0i(nr/2)=   0.818011343000000     
+ Gyrokrs =   0.241640980916243     
+ mpi rank=                     7 INFO=                     0 myid=
+                     7
+ mpi rank=                     5 INFO=                     0 myid=
+                     5
+ mpi rank=                     2 INFO=                     0 myid=
+                     2
+ mpi rank=                     6 INFO=                     0 myid=
+                     6
+ mpi rank=                     0 INFO=                     0 myid=
+                     0
+ mpi rank=                     3 INFO=                     0 myid=
+                     3
+ mpi rank=                     4 INFO=                     0 myid=
+                     4
+ mpi rank=                     1 INFO=                     0 myid=
+                     1
+ before grid1   841920.193890139     
+        0.0   0.829E-24   0.144E-27   0.000E+00   0.000E+00   0.000E+00   0.000E+00   0.000E+00   0.000E+00   0.000E+00  -0.459E-19  -0.538E-20   0.462E-19
+ before grid1   841989.932591595     
+ before grid1   842054.691981121     
+ before grid1   842119.476043263     
+ before grid1   842180.254042899     
+ before grid1   842244.654200692     
+ before grid1   842306.111806939     
+        0.3   0.831E-24   0.408E-27   0.552E-50   0.832E-50   0.552E-50   0.812E-50   0.342E-24   0.000E+00   0.342E-24  -0.458E-19  -0.597E-20   0.462E-19
+ before grid1   842372.392568175     
+ before grid1   842433.677178121     
+ before grid1   842498.198018059     

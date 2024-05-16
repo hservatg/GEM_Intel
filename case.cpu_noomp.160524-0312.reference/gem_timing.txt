@@ -1,0 +1,13 @@
+ tot time=   637.892609006900      ppush time   86.8430738654570      cpush time
+   86.9380221277534      pint time   89.8225557134283      cint time
+   89.4161471185071      grid time   54.9285136715189      jie time
+  0.000000000000000E+000 den0 time  0.000000000000000E+000 setw time
+   6.68066150380764      weatxeps time   2.50829026047722      wiatxeps time
+   2.82845378464845      pbi time   18.8776388460683      pbe time
+   3.21358675500960      jpar0 time   159.793577920675     
+ init pmove   2.41738127230201      pmove   4.02914532893919      poisson
+  0.290021032895311      ampere   167.733773211556      init_lap
+   2.37684760463890      init_fltm  8.442017424385995E-003 other
+  -138.428233406143     
+ field solver percentage is  0.263404516484425      others precentage is
+ -0.217008680538961      field solver + others  4.639583594546426E-002

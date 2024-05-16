@@ -1,8 +1,8 @@
 &primary_parameters
 itube=0       !0: global simulation; 1: flux tube 
 imx=240       !number of grid points along x direction
-jmx=64       !number of grid points along y direction
-kmx=4        !number of grid points along z direction, the primary domain decomposition. 
+jmx=256       !number of grid points along y direction
+kmx=8         !number of grid points along z direction, the primary domain decomposition. 
 micell=256     !total no of marker particles of ions
 mecell=256     !total no of marker particles of electrons
 nsmx=1        !maximum number if impurity ions
@@ -11,10 +11,10 @@ nsm=1         !number of ion species
 ntube=4       !calculated from numprocs and km
 lxa=0.8       !radial box size divided by a
 r0a=0.5       !r0/a; center of the radial domain
-lymult=16      !the lowest nonzero toroidal mode number, Ly=2*pi*r0/q0/lymult
-jcnt=3       !number of toroidal mode numbers.  +n and -n count as two different modes, plus the n=0 mode
-dt=.31358384000000000000         !times steps in units of omega_u=eB/mp
-nm=100       !total no of times steps
+lymult=16     !the lowest nonzero toroidal mode number, Ly=2*pi*r0/q0/lymult
+jcnt=3        !number of toroidal mode numbers.  +n and -n count as two different modes, plus the n=0 mode
+dt=0.1        !times steps in units of omega_u=eB/mp
+nm=5          !total no of times steps
 
 amp=1e-23      !amplitude of initial weight defined in loading (loadi and ldel)
 isg=0.0       !split weigh factor, almost always 1.0
@@ -112,7 +112,7 @@ icrs_sec=0    !used in global codes to plot poloidal cross-section .
 ipg=100       !which snapshot to get
 isphi=1       !which potential to plot. 0 for A_||; 1 for phi
 nplot=100     !the interval in time steps, at which the data are stored for contour plots and other post-processing stuff
-xnplt=10       !the interval in time steps at which spec and dchi called to calculate potentials, weight, fluxes and other stuff
+xnplt=3       !the interval in time steps at which spec and dchi called to calculate potentials, weight, fluxes and other stuff
 isft=0        !if isft=1, code calculates the real frequency 
 mynf=10       !nfreq=kmx*mynf no of points in in Fourier transform
 frmax=0.04   !maximum range of frequency

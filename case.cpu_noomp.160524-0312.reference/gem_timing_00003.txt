@@ -1,0 +1,15 @@
+ myid=                     3 mm(ns)              15736023 mme
+              15726462
+ tot time=   637.892780346447      ppush time   86.0949846340809      cpush time
+   86.2218257520581      pint time   89.6533656703541      cint time
+   89.3609038284048      grid time   54.7562202401459      jie time
+  0.000000000000000E+000 den0 time  0.000000000000000E+000 setw time
+   6.38718498859089      weatxeps time   2.45676192827523      wiatxeps time
+   2.76855463744141      pbi time   18.5548342295224      pbe time
+   3.34154020110145      jpar0 time   158.834635020583     
+ init pmove   2.41735902684741      pmove   4.02916529111098      poisson
+  0.290021577617154      ampere   167.733882547007      init_lap
+   2.37684806366451      init_fltm  8.352436008863151E-003 other
+  -135.008459226694     
+ field solver percentage is  0.263404617988259      others precentage is
+ -0.211647573677459      field solver + others  5.175704431079951E-002
