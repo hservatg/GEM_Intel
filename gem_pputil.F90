@@ -216,9 +216,11 @@ CONTAINS
     IF( .not. ALLOCATED(s_buf) ) THEN
        ksize=2*nsize         ! To prevent too much futur reallocations
        ALLOCATE(s_buf(1:ksize))
-       ALLOCATE(ipsend(1:ksize))
-       ALLOCATE(iphole(1:ksize))
        ALLOCATE(ipfill(1:ksize))
+!$omp allocators allocate(allocator(omp_init_allocator &
+!$omp   (omp_get_devices_all_memspace(omp_default_mem_space), 1, &
+!$omp    [omp_alloctrait(omp_atk_pinned, omp_atv_true)])) : ipsend, iphole)
+       ALLOCATE(ipsend(1:ksize),iphole(1:ksize))
        !$acc enter data create(s_buf,ipsend,iphole,ipfill)
 !$omp target enter data map(alloc:s_buf,ipsend,iphole,ipfill)
     ELSE IF ( SIZE(s_buf) .LT. nsize ) THEN
@@ -229,9 +231,11 @@ CONTAINS
        DEALLOCATE(iphole)
        DEALLOCATE(ipfill)
        ALLOCATE(s_buf(1:nsize))
-       ALLOCATE(ipsend(1:nsize))
-       ALLOCATE(iphole(1:nsize))
        ALLOCATE(ipfill(1:nsize))
+!$omp allocators allocate(allocator(omp_init_allocator &
+!$omp   (omp_get_devices_all_memspace(omp_default_mem_space), 1, &
+!$omp    [omp_alloctrait(omp_atk_pinned, omp_atv_true)])) : ipsend, iphole)
+       ALLOCATE(ipsend(1:nsize),iphole(1:nsize))
        !$acc enter data create(s_buf,ipsend,iphole,ipfill)
 !$omp target enter data map(alloc:s_buf,ipsend,iphole,ipfill)
     END IF
@@ -616,9 +620,11 @@ tottm_5=end_tm-start_tm
     IF( .not. ALLOCATED(s_buf) ) THEN
        ksize=2*nsize         ! To prevent too much futur reallocations
        ALLOCATE(s_buf(1:ksize))
-       ALLOCATE(ipsend(1:ksize))
-       ALLOCATE(iphole(1:ksize))
        ALLOCATE(ipfill(1:ksize))
+!$omp allocators allocate(allocator(omp_init_allocator &
+!$omp   (omp_get_devices_all_memspace(omp_default_mem_space), 1, &
+!$omp    [omp_alloctrait(omp_atk_pinned, omp_atv_true)])) : ipsend, iphole)
+       ALLOCATE(ipsend(1:ksize),iphole(1:ksize))
        !$acc enter data create(s_buf,ipsend,iphole,ipfill)
 !$omp target enter data map(alloc:s_buf,ipsend,iphole,ipfill)
     ELSE IF ( SIZE(s_buf) .LT. nsize ) THEN
@@ -629,9 +635,11 @@ tottm_5=end_tm-start_tm
        DEALLOCATE(iphole)
        DEALLOCATE(ipfill)
        ALLOCATE(s_buf(1:nsize))
-       ALLOCATE(ipsend(1:nsize))
-       ALLOCATE(iphole(1:nsize))
        ALLOCATE(ipfill(1:nsize))
+!$omp allocators allocate(allocator(omp_init_allocator &
+!$omp   (omp_get_devices_all_memspace(omp_default_mem_space), 1, &
+!$omp    [omp_alloctrait(omp_atk_pinned, omp_atv_true)])) : ipsend, iphole)
+       ALLOCATE(ipsend(1:nsize),iphole(1:nsize))
        !$Acc enter data create(s_buf,ipsend,iphole,ipfill)
 !$omp target enter data map(alloc:s_buf,ipsend,iphole,ipfill)
     END IF
